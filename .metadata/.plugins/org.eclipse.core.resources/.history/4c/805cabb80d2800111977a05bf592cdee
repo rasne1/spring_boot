@@ -1,0 +1,6 @@
+# spring.application.name=hello-spring
+spring:
+  datasourse:
+    url: jdbc:oracle:thin:@localhost:1521:XE
+  application:
+    name: hello-spring
