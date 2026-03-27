@@ -1,0 +1,14 @@
+package com.ktdsuniversity.edu.board.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
+
+@Controller
+public class membersController {
+	
+	@PostMapping("/members")
+	public String createMembersPage() {
+		return "members/member";
+	}
+
+}

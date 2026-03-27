@@ -3,6 +3,7 @@ package com.ktdsuniversity.edu;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /*
@@ -27,7 +28,15 @@ public class TestEndPointController {
 	 * */
 	
 	@GetMapping("/jsp")
-	public String viewHelloJspPage() {
+	public String viewHelloJspPage(Model model) {
+		// Model model parameter ==> template Engine(jsp)에게 데이터를 전송시키는 객체.
+		//
+		System.out.println(model);
+		// myname 이라는 키(변수명)로 "오현석" 할당 해서 템플릿에게 전달.
+		model.addAttribute("myname","오현석");
+		model.addAttribute("age",36);
+		System.out.println(model);
+		
 		// spring.mvc.view.prefix+hellojsp+spring.mvc.ciew.suffix
 		// /WEB-INF/views/+hellojsp+.jsp
 		// /WEB-INF/views/hellojsp.jsp
@@ -41,10 +50,10 @@ public class TestEndPointController {
 	
 	
 	/*
-	 * 사용자가 "/" 엔드포인트에 접근 하면 
+	 * 사용자가 "/root" 엔드포인트에 접근 하면 
 	 * "첫 페이지입니다. 환영합니다" 를 브라우저에 보내주는 코드 작성.
 	 * */
-	@GetMapping("/")
+	@GetMapping("/root")
 	public ResponseEntity<String> welcomePage(){
 		return new ResponseEntity<>("첫 페이지 입니다. 환영합니다.", HttpStatus.OK);
 	}

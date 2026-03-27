@@ -1,0 +1,34 @@
+package com.ktdsuniversity.edu;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+@Controller
+public class CalculateController {
+	
+	/*
+	 * <pre>
+	 * 엔드포인트 = /calc
+	 * 반환시키는 템플릿 이름 = calc.jsp
+	 * 템플릿으로 반환시키는 데이터
+	 * 1. firstNum
+	 * 2. secondNum
+	 * 3. result (firstNum + secondNum 의 결과 )
+	 * 
+	 * 템플릿의 결과는 
+	 *  - <div>
+	 *     <span>firstNum 값</span>
+	 *     <span>secondNum 의 값</span>
+	 *     <span>result 의 값</span>
+	 *    </div>
+	 * </pre>
+	 * */
+	@GetMapping("/calc")
+	public String viewCalcPage(Model model) {
+		model.addAttribute("firstNum", 3);
+		model.addAttribute("secondNum", 8);
+		model.addAttribute("result", firstNum+secondNum);
+		return "calc";
+	}
+
+}

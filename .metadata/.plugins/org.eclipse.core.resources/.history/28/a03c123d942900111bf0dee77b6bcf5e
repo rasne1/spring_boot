@@ -1,0 +1,11 @@
+package com.ktdsuniversity.edu.members.vo.request;
+
+public class MembersVO {
+
+	private String name;
+	private String id;
+	private String password;
+	private String address;
+	
+	
+}

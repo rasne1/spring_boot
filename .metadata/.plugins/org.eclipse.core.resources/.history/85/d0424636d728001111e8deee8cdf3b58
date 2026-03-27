@@ -1,0 +1,13 @@
+package com.ktdsuniversity.edu.board.service;
+
+import com.ktdsuniversity.edu.board.vo.SearchResultVO;
+@Service
+public class BoardServiceImpl implements BoardService {
+
+	@Override
+	public SearchResultVO findAllBoard() {
+		
+		return null;
+	}
+
+}
