@@ -69,6 +69,13 @@
            SET VIEW_CNT = VIEW_CNT + 1
          WHERE ID = #{_parameter}
     </update>
+    
+    <delete id="deleteBoardById"
+            parameterType="string">
+        DELETE
+          FROM BOARD
+         WHERE ID = #{_parameter}
+    </delete>
 </mapper>
 
 

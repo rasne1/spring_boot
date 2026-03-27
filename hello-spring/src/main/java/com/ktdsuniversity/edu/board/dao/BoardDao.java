@@ -20,4 +20,6 @@ public interface BoardDao {
 
 	int updateViewCntIncreaseById(String articleId);
 
+	int deleteBoardById(String id);
+
 }

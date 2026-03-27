@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ktdsuniversity.edu.board.service.BoardService;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
@@ -79,5 +80,14 @@ public class BoardController {
 		
 		return "board/view";
 	}
+	
+	@GetMapping("/delete")
+	public String doDeleteAction(@RequestParam String id) {
+		
+		boolean deleteResult = this.boardService.deleteBoardByArticleId(id);
+		return "redirect:/";
+		
+	}
+	
 	
 }

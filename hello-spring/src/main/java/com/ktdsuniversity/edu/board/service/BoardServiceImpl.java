@@ -70,4 +70,10 @@ public class BoardServiceImpl implements BoardService {
 		return board;
 	}
 
+	@Override
+	public boolean deleteBoardByArticleId(String id) {
+		int deleteCount = this.boardDao.deleteBoardById(id);
+		return deleteCount == 1;
+	}
+
 }

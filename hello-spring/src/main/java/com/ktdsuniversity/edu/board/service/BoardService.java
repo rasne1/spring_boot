@@ -22,4 +22,6 @@ public interface BoardService {
 
 	BoardVO findBoardByArticleId(String articleId);
 
+	boolean deleteBoardByArticleId(String id);
+
 }

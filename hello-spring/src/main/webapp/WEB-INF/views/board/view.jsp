@@ -33,6 +33,12 @@ pageEncoding="UTF-8"%>
 
       <span>내용</span>
       <div>${article.content}</div>
+
+      <div class="btn-group">
+        <div class="right-align">
+            <a href="/delete?id=${article.id}">삭제</a>
+        </div>
+      </div>
     </div>
   </body>
 </html>
