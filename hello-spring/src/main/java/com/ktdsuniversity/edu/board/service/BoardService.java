@@ -1,7 +1,9 @@
 package com.ktdsuniversity.edu.board.service;
 
+import com.ktdsuniversity.edu.board.enums.ReadType;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.SearchResultVO;
+import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
 /**
  * 상황별(회원의 등급이 다르다 => 일반사용자, 관리자, 슈퍼관리자, 운영자
@@ -19,9 +21,11 @@ public interface BoardService {
 
 	boolean createNewBoard(WriteVO writeVO);
 
-	BoardVO findBoardByArticleId(String articleId);
+	BoardVO findBoardByArticleId(String articleId, ReadType readType);
 
 	boolean deletePosts(String id);
+
+	boolean updateBoardByArticleId(UpdateVO updateVO);
 
 
 }

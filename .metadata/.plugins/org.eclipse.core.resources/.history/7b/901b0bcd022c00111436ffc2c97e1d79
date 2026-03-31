@@ -1,0 +1,17 @@
+package com.ktdsuniversity.edu.members.service;
+
+import com.ktdsuniversity.edu.members.enums.ReadType;
+import com.ktdsuniversity.edu.members.vo.request.MemberUpdateVO;
+import com.ktdsuniversity.edu.members.vo.request.MembersVO;
+
+public interface MembersService {
+
+	boolean createNewMember(MembersVO membersVO);
+
+	MembersVO findMembersByArticleId(String id, ReadType readType);
+
+	boolean updateMemberById(MemberUpdateVO memberUpdateVO);
+	
+	
+
+}

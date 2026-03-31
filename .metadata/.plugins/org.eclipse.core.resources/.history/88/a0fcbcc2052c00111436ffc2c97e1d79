@@ -1,0 +1,57 @@
+<%-- <%@ Directive %> --%>
+<%-- Page Directive --%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%-- JSTL을 사용하기 위해서는 taglib directive 필요 --%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+
+	<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>회원 목록</title>
+    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css">
+  </head>
+  <body>
+    <h1>회원 목록</h1>
+    <div>총 ${searchCount}회원이 검색되었습니다.</div>
+
+    <table class="grid">
+        <thead>
+            <tr>
+            <th>이메일</th>
+            <th>이름</th>
+            <th>비밀번호</th>
+            </tr>
+        </thead>
+        <tbody>
+            <c:choose>
+                <c:when test="${not empty searchResult}">
+                <c:forEach items="${searchResult}" var="members">
+                    <tr>
+                        <td>
+                        <td>${members.email}</td>
+                        <td>
+                            <a href="/members/view/${members.email}">${members.name}</a>
+                        </td>
+                        <td>${members.email}</td>
+                        <td>${members.viewCnt}</td>
+                        <td>${members.crtDt}</td>
+                        <td>${members.mdfyDt}</td>
+                    </tr>
+                </c:forEach>
+                </c:when>
+                <c:otherwise>
+                     <tr>
+                        <td colspan="6">검색된 데이터가 없습니다.</td>
+                     </tr>
+                </c:otherwise>
+             </c:choose>
+             <!-- searchResult가 존재하지 않으면, "검색된 데이터가 없습니다"를 보여주고-->
+             <!-- searchResult가 존재하면, 반복하여 데이터를 보여주고 -->
+            
+        </tbody>
+        <a href="/write">새로운 게시글 작성</a>
+    </table>
+</body>
+</html>

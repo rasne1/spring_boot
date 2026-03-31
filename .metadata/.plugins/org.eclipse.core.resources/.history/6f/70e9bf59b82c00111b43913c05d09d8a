@@ -1,0 +1,6 @@
+package com.ktdsuniversity.edu.files.dao;
+
+@Mapper
+public interface FilesDao {
+
+}

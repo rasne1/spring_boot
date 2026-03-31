@@ -1,0 +1,93 @@
+package com.ktdsuniversity.edu.members.web;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.ktdsuniversity.edu.members.enums.ReadType;
+import com.ktdsuniversity.edu.members.service.MembersService;
+import com.ktdsuniversity.edu.members.vo.request.MemberUpdateVO;
+import com.ktdsuniversity.edu.members.vo.request.MembersVO;
+import com.ktdsuniversity.edu.members.vo.response.SearchResultVO;
+
+@Controller
+public class membersController {
+	
+	@Autowired
+	private MembersService membersService;
+	
+	@GetMapping("/regist")
+	public String createMembersPage() {
+		return "members/member";
+	}
+	
+	@PostMapping("/regist")
+	public String doSignUpAction(MembersVO membersVO) {
+		
+		
+		boolean createResult = this.membersService.createNewMember(membersVO);
+		
+		return "redirect:/";
+		
+	}
+	@GetMapping("/members/view")
+	public String viewMemberListPage(Model model) {
+		
+		SearchResultVO searchResult = this.membersService.findAllMemberList();
+		
+		List<MembersVO> list = searchResult.getResult();
+		int searchCount = searchResult.getCount();
+		
+		model.addAttribute("searchResult", list);
+		model.addAttribute("searchCount", searchCount);
+		
+		
+		
+				return "members/list";
+	}
+	
+	@GetMapping("/members/view/{email}")
+	public String viewDetailPage(@PathVariable String email, Model model) {
+		
+		MembersVO findResult =this.membersService.findMemberByEmail(email);
+		
+		model.addAttribute("members", findResult);
+		
+		return "members/view";
+	}
+	
+	@GetMapping("/members/update/{email}")
+	public String updateMemberInfo(@PathVariable String email, Model model) {
+		MembersVO findResult2 =this.membersService.findMemberByEmail(email);
+		model.addAttribute("members", findResult2);
+		
+		return "members/update"+email;
+	}
+	
+	@PostMapping("/members/update/{email}")
+	public String doUpdateAction(@PathVariable String email, MemberUpdateVO memberUpdateVO) {
+		memberUpdateVO.setEmail(email);
+		boolean updateResult = this.membersService.updateMemberByEmail(memberUpdateVO);
+		
+		
+		return "redirect:/view/"+email;
+	}
+	
+	
+	
+
+	// /member ==> 회원들의 목록이 조회되도록 코드를 작성.
+	//         ==> 회원 목록 조회.
+	//			==> members/list.jsp : 회원 목록 반복.
+	//								 : 회원의 수 출력
+	//								 : 회원의 수가 없을 때, "등록된 회원이 없습니다." 출력
+	//								 : 목록 아래에는 "새로운 회원 등록 " 링크 추가.
+
+	
+
+}
