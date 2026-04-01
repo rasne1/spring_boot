@@ -1,36 +1,21 @@
 package com.ktdsuniversity.edu.board.vo.request;
 
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
 public class UpdateVO extends WriteVO {
 	
-	private String id; //update ~ where 에 사용할 변수
-	private String subject;
-	private String email;
-	private String content;
+	private List<Integer> deleteFileNum;
+
+	public List<Integer> getDeleteFileNum() {
+		return deleteFileNum;
+	}
+
+	public void setDeleteFileNum(List<Integer> deleteFileNum) {
+		this.deleteFileNum = deleteFileNum;
+	}
 	
-	public String getId() {
-		return this.id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public String getSubject() {
-		return this.subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	public String getEmail() {
-		return this.email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getContent() {
-		return this.content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
 	
 	
 

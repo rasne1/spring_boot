@@ -15,6 +15,7 @@ import com.ktdsuniversity.edu.board.vo.SearchResultVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
 import com.ktdsuniversity.edu.files.dao.FilesDao;
+import com.ktdsuniversity.edu.files.helpers.MultipartFileHandler;
 import com.ktdsuniversity.edu.files.vo.request.UploadVO;
 
 @Service
@@ -28,6 +29,9 @@ public class BoardServiceImpl implements BoardService {
 	
 	@Autowired
 	private BoardDao boardDao;
+	
+	@Autowired
+	private MultipartFileHandler multipartFileHandler;
 	
 	@Autowired
 	private FilesDao filesDao;
@@ -63,37 +67,7 @@ public class BoardServiceImpl implements BoardService {
 		
 		// 첨부파일 업로드
 		List<MultipartFile> attachFiles= writeVO.getAttachFile();
-		if(attachFiles != null && attachFiles.size() >0) {
-			for(int i =0; i<attachFiles.size(); i++) {
-			//for(MultipartFile uploadedFile: attachFiles) {
-				//업로드한 파일이 서버컴퓨터의 파일 시스템에 저장되도록 한다.
-				File storeFile = new File("C://uploadFiles", attachFiles.get(i).getOriginalFilename());
-				// C://uploadFiles 폴더가 없으면 생성해라
-				if(!storeFile.getParentFile().exists()) {
-					storeFile.getParentFile().mkdirs();
-				}
-				try {
-					attachFiles.get(i).transferTo(storeFile);
-					// FILES 테이블에 첨부파일 데이터를 INSERT
-					UploadVO uploadVO = new UploadVO();
-					String filename = attachFiles.get(i).getOriginalFilename();
-					String ext = filename.substring(filename.lastIndexOf(".")+1);
-					uploadVO.setFileNum(i+1);
-					uploadVO.setFileGroupId(writeVO.getId());//새롭게 등록되는 게시글의 아이디를 지금은 알수없다.
-					uploadVO.setObfuscateName(filename);
-					uploadVO.setDisplayName(filename);
-					uploadVO.setExtendName(ext);
-					uploadVO.setFileLength( storeFile.length() ); // 실제로 업로드한 파일크기 
-					uploadVO.setFilePath(storeFile.getAbsolutePath());
-					
-					this.filesDao.insertAttachFile(uploadVO);
-				} catch (IllegalStateException | IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		
+		this.multipartFileHandler.upload(attachFiles, writeVO.getId());
 		
 		System.out.println("생성된 게시글 믓개 ?"+insertCount);
 		return insertCount == 1;
@@ -119,12 +93,44 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public boolean deletePosts(String id) {
 		int deletePostsById = this.boardDao.deletePostsByArticleId(id);
-		return deletePostsById == 1;
+	
+		//삭제하려는 게시글에 첨부된 파일 목록을 가져온다.
+	List<String> filePaths = this.filesDao.selectFilePathByFileGroupId(id);
+	if(filePaths !=null && filePaths.size()>0) {	
+		//파일 목록이 존재하면, 모든 파일들을 제거한다.
+		for(String path: filePaths) {
+			new File(path).delete();
+		}
+		// 파일 목록을 제거한 이후에 "FILES" 테이블에서 해당 파일 정보를 모두 삭제한다.
+		int deleteFileCount = this.filesDao.deleteFileByFileGroupId(id);
+		System.out.println("파일 삭제 개수?" + deleteFileCount);
 	}
+		
+		
+		return deletePostsById == 1;
+}
 
 	@Override
 	public boolean updateBoardByArticleId(UpdateVO updateVO) {
 		int updateCount = this.boardDao.updateBoardById(updateVO);
+		
+		// 선택한 파일들만 삭제.
+		if(updateVO.getDeleteFileNum() !=null && updateVO.getDeleteFileNum().size()>0) {
+			// 선택한 파일들의 정보를 조회 --> 파일의 경로 --> 실제파일을 제거.
+			List<String> deleteTargets = this.filesDao.selectFilePathByFileGroupIdAndFileNums(updateVO);
+			// 선택한 파일들을 FILES 테이블에서 제거.
+			for(String target:deleteTargets) {
+				new File(target).delete();
+			}
+			// 선택한 파일들을 FILES 테이블 제거.
+			int deleteCount = this.filesDao.deleteFilesByFileGroupIdAndFileNums(updateVO);
+			System.out.println(deleteCount);	
+		}
+		
+		
+		
+		List<MultipartFile> attachFiles = updateVO.getAttachFile();
+		this.multipartFileHandler.upload(attachFiles, updateVO.getId());
 		return updateCount == 1;
 	}
 

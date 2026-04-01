@@ -98,7 +98,7 @@ public class BoardController {
 		BoardVO data = this.boardService.findBoardByArticleId(articleId, ReadType.UPDATE);
 		model.addAttribute("article", data);
 		System.out.println(data.getId());
-		return "board/view";
+		return "board/update";   
 	}
 
 	@PostMapping("/update/{articleId}")
