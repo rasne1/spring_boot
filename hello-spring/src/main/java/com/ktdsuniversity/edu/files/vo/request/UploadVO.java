@@ -2,21 +2,12 @@ package com.ktdsuniversity.edu.files.vo.request;
 
 public class UploadVO {
 
-	private int fileNum;
 	private String fileGroupId;
 	private String obfuscateName;
 	private String displayName;
 	private String extendName;
 	private long fileLength;
 	private String filePath;
-
-	public int getFileNum() {
-		return this.fileNum;
-	}
-
-	public void setFileNum(int fileNum) {
-		this.fileNum = fileNum;
-	}
 
 	public String getFileGroupId() {
 		return this.fileGroupId;

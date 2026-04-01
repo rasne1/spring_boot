@@ -14,7 +14,9 @@
         , FILE_LENGTH
         , FILE_PATH) 
         VALUES
-         (#{fileNum}
+         ((SELECT NVL(MAX(FILE_NUM), 0) + 1
+			 FROM FILES
+			WHERE FILE_GROUP_ID = #{fileGroupId})
         , #{fileGroupId}
         , #{obfuscateName}
         , #{displayName}
@@ -22,6 +24,64 @@
         , #{fileLength}
         , #{filePath})
     </insert>
+    
+    <select id="selectFilesByFileGroupIdAndFileNum"
+            parameterType="com.ktdsuniversity.edu.files.vo.request.SearchFileVO"
+            resultType="com.ktdsuniversity.edu.files.vo.response.DownloadVO">
+        SELECT DISPLAY_NAME
+		     , EXTEND_NAME
+		     , FILE_LENGTH
+		     , FILE_PATH
+		  FROM FILES
+		 WHERE FILE_GROUP_ID = #{fileGroupId}
+		   AND FILE_NUM = #{fileNum}
+    </select>
+    
+    <select id="selectFilePathByFileGroupIdAndFileNums"
+            parameterType="com.ktdsuniversity.edu.board.vo.request.UpdateVO"
+            resultType="string">
+        SELECT FILE_PATH
+		  FROM FILES
+		 WHERE FILE_GROUP_ID = #{id}
+		   AND FILE_NUM IN
+		   <foreach collection="deleteFileNum" 
+		            item="fileNum" 
+		            open="(" 
+		            close=")" 
+		            separator=", ">
+		       #{fileNum}
+		   </foreach>
+    </select>
+
+    <delete id="deleteFilesByFileGroupIdAndFileNums"
+            parameterType="com.ktdsuniversity.edu.board.vo.request.UpdateVO">
+        DELETE
+          FROM FILES
+         WHERE FILE_GROUP_ID = #{id}
+           AND FILE_NUM IN
+           <foreach collection="deleteFileNum" 
+                    item="fileNum" 
+                    open="(" 
+                    close=")" 
+                    separator=", ">
+               #{fileNum}
+           </foreach>
+    </delete>
+    
+    <select id="selectFilePathByFileGroupId"
+            parameterType="string"
+            resultType="string">
+        SELECT FILE_PATH
+          FROM FILES
+         WHERE FILE_GROUP_ID = #{_parameter}
+    </select>
+
+    <delete id="deleteFileByFileGroupId"
+            parameterType="string">
+        DELETE
+          FROM FILES
+         WHERE FILE_GROUP_ID = #{_parameter}
+    </delete>
 </mapper>
 
 
