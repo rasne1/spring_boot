@@ -31,6 +31,15 @@
 		<java.version>17</java.version>
 	</properties>
       <dependencies>
+       <!-- Source: https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation -->
+    <!-- 파라미터 유효성 검사(@Vaild)-->
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-validation</artifactId>
+        <scope>compile</scope>
+    </dependency>
+      
+      
       <!-- Source: https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
     <dependency>
         <groupId>jakarta.servlet.jsp.jstl</groupId>

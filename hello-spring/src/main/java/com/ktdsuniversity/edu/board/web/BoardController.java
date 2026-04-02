@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,8 @@ import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.SearchResultVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class BoardController {
@@ -53,7 +56,18 @@ public class BoardController {
 	}
 
 	@PostMapping("/write")
-	public String doWriteAction(WriteVO writeVO) {
+	public String doWriteAction(@Valid @ModelAttribute WriteVO writeVO,
+			//valid의 결과를 받아오는 파라미터
+			// 반드시 @Valid의 파라미터 이후에 작성
+			BindingResult bindingResult,Model model) {
+		//사용자의 입력값을 검증 했을 때, 에러가 있다면
+		if(bindingResult.hasErrors()) {
+			//브라우저에게 "board/write" 페이지를 보여주도록 하고
+			//해당 페이지에 사용자가 입력한 값을 전달한다.
+			model.addAttribute("inputData", writeVO);
+			return "board/write";
+		}
+		
 		System.out.println(writeVO.getContent());
 		System.out.println(writeVO.getEmail());
 		System.out.println(writeVO.getSubject());

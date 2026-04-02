@@ -1,9 +1,16 @@
 package com.ktdsuniversity.edu.members.vo.request;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
+
 public class MembersVO {
 
+	@NotEmpty(message="아이디 입력해라")
 	private String name;
+	@Pattern(regexp="^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$"
+	         ,message="비밀번호는 거 다른데 하던대로 ")
 	private String password;
+	@NotEmpty(message="이메일! 입력!")
 	private String email;
 	
 	
