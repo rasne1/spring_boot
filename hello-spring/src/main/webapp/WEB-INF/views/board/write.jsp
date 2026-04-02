@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -11,23 +12,44 @@
   <body>
     <h1>게시글 작성</h1>
     <%-- action ==> form 내부의 value를 전송할 엔드포인트 --%>
-    <form method="post" action="/write" enctype="multipart/form-data">
+    <%-- form:form modelAttibute ==> 
+            form 태그 내부의 input, textarea, select 등을 
+            컨트롤러 보내기 위한 아이디
+            보편적으로 변수의 이름(엔드포인트의) --%>
+    <form:form
+      modelAttribute="writeVO"
+      method="post"
+      action="/write"
+      enctype="multipart/form-data"
+    >
       <div class="grid write">
         <label for="subject">제목</label>
-        <input
-          type="text"
-          id="subject"
-          name="subject"
-          placeholder="제목을 입력하세요."
-        />
+        <div class="input-div">
+          <input
+            type="text"
+            id="subject"
+            name="subject"
+            placeholder="제목을 입력하세요."
+            value="${inputData.subject}"
+          />
+          <form:errors path="subject" 
+                       cssClass="validation-error" 
+                       element="div" />
+        </div>
 
         <label for="email">이메일</label>
-        <input
-          type="email"
-          id="email"
-          name="email"
-          placeholder="이메일을 입력하세요."
-        />
+        <div class="input-div">
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="이메일을 입력하세요."
+            value="${inputData.email}"
+          />
+          <form:errors path="email" 
+                       cssClass="validation-error"
+                       element="div" />
+        </div>
 
         <label for="attach-files">첨부파일</label>
         <div id="attach-files" class="attach-files">
@@ -36,11 +58,9 @@
         </div>
 
         <label for="content">내용</label>
-        <textarea
-          id="content"
-          name="content"
-          placeholder="내용을 입력하세요"
-        ></textarea>
+        <textarea id="content" name="content" placeholder="내용을 입력하세요">
+${inputData.content}</textarea
+        >
 
         <div class="btn-group">
           <div class="right-align">
@@ -48,6 +68,6 @@
           </div>
         </div>
       </div>
-    </form>
+    </form:form>
   </body>
 </html>

@@ -7,6 +7,16 @@ body {
   margin: 0;
   color: #333;
 }
+
+div.validation-error {
+  color: #f00;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+  padding: 0.425rem;
+  background-color: #f002;
+}
+
 /* list style 시작 */
 ul.vertical-list {
   margin: 0;
@@ -173,8 +183,14 @@ div.update {
 
 div.write {
   grid-template-columns: 5rem 1fr;
-  grid-template-rows: 1.75rem 1.75rem minmax(1.75rem, auto) 20rem 1fr;
+  grid-template-rows: repeat(3, minmax(1.75rem, auto)) 20rem 1fr;
   row-gap: 0.625rem;
+}
+
+div.regist > div.input-div > input,
+div.write > div.input-div > input {
+  width: 100%;
+  display: block;
 }
 
 div.write > div.attach-files,
