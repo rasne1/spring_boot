@@ -19,6 +19,20 @@ uri="http://www.springframework.org/tags/form" %>
       enctype="multipart/form-data"
     >
       <div class="grid">
+        <label for="email">이메일</label>
+        <div class="input-div">
+          <input
+            type="text"
+            id="email"
+            name="email"
+            placeholder="이메일을 입력하세요."
+            value="${inputData.email}"
+          />
+        </div>
+
+        <!-- value="${inputData.email}" -->
+        <form:errors path="email" cssClass="validation-error" element="div" />
+
         <label for="name">아이디</label>
         <input
           type="text"
@@ -26,24 +40,31 @@ uri="http://www.springframework.org/tags/form" %>
           name="name"
           placeholder="아이디를 입력하하세요."
         />
-        <form:errors path="name" cssclass="validation-error" element="div"/>
+        <form:errors path="name" cssClass="validation-error" element="div" />
         <label for="password">비밀번호</label>
         <input
-          type="text"
+          type="password"
           id="password"
           name="password"
           placeholder="비밀번호를 입력하세요."
         />
-        <form:errors path="password" cssclass="validation-error"  element="div"/>
-        <label for="email">이메일</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="이메일을 입력하세요."        />
-          
-          <!-- value="${inputData.email}" -->
-        <form:errors path="email" cssclass="validation-error"  element="div"/>
+        <form:errors
+          path="password"
+          cssClass="validation-error"
+          element="div"
+        />
+        <label for="confirm-password">비밀번호 확인</label>
+        <div class="input-div">
+          <input
+            type="password"
+            id="confirm-password"
+            name="confirm-password"
+          />
+        </div>
+
+        <!--비밀번호 한번 입력하기 ==> 비밀번호를 확인하는 기능 -->
+        <label for="show-password">비밀번호 확인하기</label>
+        <input type="checkbox" id="show-password" />
 
         <div class="btn-group">
           <div class="right-align">
@@ -54,4 +75,3 @@ uri="http://www.springframework.org/tags/form" %>
     </form:form>
   </body>
 </html>
-

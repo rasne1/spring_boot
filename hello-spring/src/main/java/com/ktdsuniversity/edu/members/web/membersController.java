@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ktdsuniversity.edu.members.enums.ReadType;
 import com.ktdsuniversity.edu.members.service.MembersService;
 import com.ktdsuniversity.edu.members.vo.request.MemberUpdateVO;
 import com.ktdsuniversity.edu.members.vo.request.MembersVO;
+import com.ktdsuniversity.edu.members.vo.response.DuplicateResultVO;
 import com.ktdsuniversity.edu.members.vo.response.SearchResultVO;
 
 import jakarta.validation.Valid;
@@ -24,7 +26,26 @@ public class membersController {
 
 	@Autowired
 	private MembersService membersService;
-
+	
+	@ResponseBody
+	@GetMapping("/regist/check/duplicate/{email}")
+	public DuplicateResultVO doCheckDuplicateEmailAction(@PathVariable String email) {
+		//email이 이미 사용중인지 확인한다.
+		MembersVO membersVO = this.membersService.findMemberByEmail(email);
+		//확인된 결과를 브라우저에게 JSON으로 전송한다.
+		// 이미 사용중 ==> {email : "test@gmail.com", duplicate:true}
+		// 사용중이지 않음 ==> {email : "test@gmail.com", duplicate:false}
+		DuplicateResultVO result = new DuplicateResultVO();
+		result.setEmail(email);
+		result.setDuplicate(membersVO != null);
+		
+		return result;
+		
+	}
+	
+	
+	
+	
 	@GetMapping("/regist")
 	public String createMembersPage() {
 		return "members/member";

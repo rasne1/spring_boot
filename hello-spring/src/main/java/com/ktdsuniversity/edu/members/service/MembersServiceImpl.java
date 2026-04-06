@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.ktdsuniversity.edu.members.dao.MembersDao;
 import com.ktdsuniversity.edu.members.enums.ReadType;
+import com.ktdsuniversity.edu.members.helpers.SHA256Util;
+import com.ktdsuniversity.edu.members.vo.UserVO;
 import com.ktdsuniversity.edu.members.vo.request.MemberUpdateVO;
 import com.ktdsuniversity.edu.members.vo.request.MembersVO;
 import com.ktdsuniversity.edu.members.vo.response.SearchResultVO;
@@ -19,6 +21,20 @@ public class MembersServiceImpl implements MembersService {
 
 	@Override
 	public boolean createNewMember(MembersVO membersVO) {
+		
+		MembersVO members2VO =this.membersDao.selectMembersByEmail(membersVO.getEmail());
+		if(members2VO !=null) {
+			throw new IllegalAccessError(members2VO.getEmail()+"는 이미 사용중입니다.");
+		}
+		
+		String newSalt = SHA256Util.generateSalt();
+		String usersPassword = members2VO.getPassword();
+		
+		usersPassword = SHA256Util.getEncrypt(usersPassword, newSalt);
+		
+		members2VO.setSalt(newSalt);
+		members2VO.setPassword(usersPassword);
+		
 		int insertCount = membersDao.insertNewMembers(membersVO);
 		return insertCount == 1;
 	}

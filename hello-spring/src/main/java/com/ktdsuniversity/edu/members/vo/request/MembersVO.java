@@ -12,8 +12,17 @@ public class MembersVO {
 	private String password;
 	@NotEmpty(message="이메일! 입력!")
 	private String email;
+	private String salt;
 	
 	
+	
+	
+	public String getSalt() {
+		return salt;
+	}
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
 	public String getName() {
 		return name;
 	}
