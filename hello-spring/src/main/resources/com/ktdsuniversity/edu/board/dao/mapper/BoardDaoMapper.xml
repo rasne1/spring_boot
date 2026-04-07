@@ -5,23 +5,27 @@
 <mapper namespace="com.ktdsuniversity.edu.board.dao.BoardDao">
     <select id="selectBoardCount" 
             resultType="_int">
-        SELECT COUNT(ID)
-          FROM BOARD
+        SELECT COUNT(B.ID)
+          FROM BOARD B
+         INNER JOIN MEMBERS M
+            ON B.EMAIL = M.EMAIL
     </select>
     
     <select id="selectBoardList" 
             resultType="com.ktdsuniversity.edu.board.vo.BoardVO">
-        SELECT ID
-             , SUBJECT
-             , CONTENT
-             , EMAIL
-             , VIEW_CNT
-             , TO_CHAR(CRT_DT, 'YYYY-MM-DD HH24:MI:SS') AS CRT_DT
-             , TO_CHAR(MDFY_DT, 'YYYY-MM-DD HH24:MI:SS') AS MDFY_DT
-             , FILE_NAME
-             , ORIGIN_FILE_NAME
-          FROM BOARD
-         ORDER BY ID DESC
+        SELECT B.ID
+             , B.SUBJECT
+             , B.CONTENT
+             , B.EMAIL
+             , B.VIEW_CNT
+             , TO_CHAR(B.CRT_DT, 'YYYY-MM-DD HH24:MI:SS') AS CRT_DT
+             , TO_CHAR(B.MDFY_DT, 'YYYY-MM-DD HH24:MI:SS') AS MDFY_DT
+             , B.FILE_NAME
+             , B.ORIGIN_FILE_NAME
+          FROM BOARD B
+         INNER JOIN MEMBERS M
+            ON B.EMAIL = M.EMAIL
+         ORDER BY B.ID DESC
     </select>
     
     <insert id="insertNewBoard" 

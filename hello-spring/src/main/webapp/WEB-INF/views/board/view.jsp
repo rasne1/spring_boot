@@ -1,13 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>게시글 조회: 게시글 아이디</title>
-    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css" />
-  </head>
-  <body>
+
+<jsp:include page="/WEB-INF/views/templates/header.jsp">
+    <jsp:param value="게시글 내용 조회 : ${article.id}" 
+               name="title" />
+</jsp:include>
+
     <h1>게시글 내용 조회</h1>
     <div class="grid view">
       <span>아이디</span>
@@ -52,5 +50,4 @@
         </div>
       </div>
     </div>
-  </body>
-</html>
+<jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>

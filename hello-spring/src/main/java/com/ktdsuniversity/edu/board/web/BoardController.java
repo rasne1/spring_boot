@@ -52,7 +52,16 @@ public class BoardController {
 	
 	// 게시글 등록 화면 보여주는 EndPoint
 	@GetMapping("/write")
-	public String viewWritePage() {
+	public String viewWritePage(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		MembersVO loginMember = (MembersVO) session.getAttribute("__LOGIN_DATA__");
+		
+		if(loginMember == null) {
+			return "redirect:/";
+		}
+		
+		
+		
 		return "board/write";
 	}
 
@@ -64,6 +73,11 @@ public class BoardController {
 							    BindingResult bindingResult,
 							    Model model,
 							    HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		if (session.getAttribute("__LOGIN_DATA__") == null) {
+			return "redirect:/login";
+		}
 		// 사용자의 입력값을 검증 했을 때, 에러가 있다면
 		if (bindingResult.hasErrors()) {
 			// 브라우저에게 "board/write" 페이지를 보여주도록 하고
@@ -73,10 +87,11 @@ public class BoardController {
 		}
 		
 		// 로그인 데이터(__LOGIN_DATA__)에서 로그인 한 사용자의 이메일을 가져온다.
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
 		MembersVO loginMember = (MembersVO) session.getAttribute("__LOGIN_DATA__");
 		writeVO.setEmail(loginMember.getEmail());
 		
+	
 		
 		System.out.println(writeVO.getSubject());
 		System.out.println(writeVO.getEmail());
@@ -119,16 +134,30 @@ public class BoardController {
 	}
 	
 	@GetMapping("/update/{articleId}")
-	public String viewUpdatePage(@PathVariable String articleId, Model model) {
+	public String viewUpdatePage(@PathVariable String articleId, Model model
+								, HttpServletRequest request)  {
 		BoardVO data = this.boardService.findBoardByArticleId(articleId, ReadType.UPDATE);
 		model.addAttribute("article", data);
+		
+		HttpSession session = request.getSession();
+		MembersVO loginMember = (MembersVO) session.getAttribute("__LOGIN_DATA__");
+
+		if(!loginMember.getEmail().equals(data.getEmail())) {
+			
+			throw new IllegalArgumentException("잘못된 접근입니다.");
+		}
 		return "board/update";
 	}
 	
 	@PostMapping("/update/{articleId}")
 	public String doUpdateAction(@PathVariable String articleId,
-			UpdateVO updateVO) {
+			UpdateVO updateVO,
+			HttpServletRequest request) {
 		updateVO.setId(articleId);
+		HttpSession session = request.getSession();
+		
+		MembersVO loginMember = (MembersVO) session.getAttribute("__LOGIN_DATA__");
+		updateVO.setEmail(loginMember.getEmail());
 		
 		boolean updateResult = this.boardService.updateBoardByArticleId(updateVO);
 		System.out.println("수정 성공? " + updateResult);

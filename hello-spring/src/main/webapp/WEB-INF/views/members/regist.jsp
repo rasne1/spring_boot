@@ -1,16 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>회원 가입</title>
-    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css" />
-
-    <script type="text/javascript" src="/js/jquery-4.0.0.slim.min.js"></script>
-    <script type="text/javascript" src="/js/members.js"></script>
-  </head>
-  <body>
+  <jsp:include page="/WEB-INF/views/templates/header.jsp">
+    <jsp:param value="회원 가입" name="title" />
+    <jsp:param value="<script type='text/javascript' src='/js/members.js'></script>" 
+               name="scripts" />
+  </jsp:include>
     <h1>회원 가입</h1>
     <%-- action ==> form 내부의 value를 전송할 엔드포인트 --%>
     <form:form modelAttribute="registVO" method="post" action="/regist">
@@ -73,5 +67,4 @@
         </div>
       </div>
     </form:form>
-  </body>
-</html>
+  <jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>

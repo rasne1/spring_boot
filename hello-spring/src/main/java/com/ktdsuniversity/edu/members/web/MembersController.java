@@ -124,7 +124,17 @@ public class MembersController {
 	}
 	
 	@GetMapping("/login")
-	public String viewLoginPage() {
+	public String viewLoginPage(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		MembersVO loginMember = (MembersVO) session.getAttribute("__LOGIN_DATA__");
+		
+		if(loginMember !=null) {
+			
+			return "redirect:/";
+		}
+		
+		
 		return "members/login"; 
 	}
 	
@@ -157,6 +167,12 @@ public class MembersController {
 		session.setAttribute("__LOGIN_DATA__", member);
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping("/logout")
+	public String doLogoutAction(HttpServletRequest request) {
+		request.getSession().invalidate();
+		return "redirect:/login";
 	}
 }
 
