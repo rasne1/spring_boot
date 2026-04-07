@@ -16,7 +16,7 @@ public class MembersVO {
 	private String latestLoginFailDate;
 	private String blockYn;
 	private String fileGroupId;
-
+	
 	public String getEmail() {
 		return this.email;
 	}

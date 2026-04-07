@@ -128,10 +128,9 @@ public class MembersController {
 	public String viewLoginPage(
 			@SessionAttribute(name = "__LOGIN_DATA__", required = false) MembersVO loginMember) {
 		
-		if(loginMember !=null) {
+		if (loginMember != null) {
 			return "redirect:/";
 		}
-		
 		
 		return "members/login"; 
 	}
@@ -171,6 +170,25 @@ public class MembersController {
 	public String doLogoutAction(HttpSession session) {
 		session.invalidate();
 		return "redirect:/login";
+	}
+	
+	@GetMapping("/delete-me")
+	public String doDeleteAction(
+			@SessionAttribute(name="__LOGIN_DATA__", required = false) MembersVO loginMember,
+			HttpSession session) {
+		// 1. 로그인 세션에서 회원의 이메일을 가져온다.
+		String email = loginMember.getEmail();
+		
+		// 2. MEMBERS 테이블에서 회원의 정보를 이메일을 이용해 삭제한다.
+		boolean deleteSuccess = this.membersService.deleteMemberByEmail(email);
+		System.out.println("탈퇴 성공? " + deleteSuccess);
+		
+		// 3. 현재 로그인된 사용자를 로그아웃 시킨다.
+		session.invalidate();
+		
+		// 4. "members/deletesuccess" 페이지를 보여준다.
+		//    "탈퇴가 완료됐습니다. 다음에 다시 만나요!"
+		return "members/deletesuccess";
 	}
 }
 

@@ -15,7 +15,7 @@
             <ul class="header-item">
               <li>번호</li>
               <li>제목</li>
-              <li>이메일</li>
+              <li>이름</li>
               <li>조회수</li>
               <li>등록일</li>
               <li>수정일</li>
@@ -31,7 +31,7 @@
                     <li>
                       <a href="/view/${board.id}">${board.subject}</a>
                     </li>
-                    <li>${board.email}</li>
+                    <li>${board.membersVO.name}</li>
                     <li class="center">${board.viewCnt}</li>
                     <li class="center">${board.crtDt}</li>
                     <li class="center">${board.mdfyDt}</li>
@@ -52,7 +52,9 @@
 
         <div class="btn-group">
           <div class="right-align">
-            <a href="/write">새로운 게시글 작성</a>
+            <c:if test="${not empty sessionScope.__LOGIN_DATA__}">
+              <a href="/write">새로운 게시글 작성</a>
+            </c:if>
           </div>
         </div>
       </div>

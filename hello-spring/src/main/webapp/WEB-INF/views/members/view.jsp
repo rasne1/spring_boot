@@ -17,6 +17,7 @@
         <div class="right-align">
           <a href="/member/update/${member.email}">수정</a>
           <a href="/member/delete?id=${member.email}">삭제</a>
+          <a href="/delete-me">탈퇴하기</a>
         </div>
       </div>
     </div>
