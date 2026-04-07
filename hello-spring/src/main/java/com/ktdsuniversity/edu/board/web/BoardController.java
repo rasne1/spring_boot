@@ -51,12 +51,7 @@ public class BoardController {
 	
 	// 게시글 등록 화면 보여주는 EndPoint
 	@GetMapping("/write")
-	public String viewWritePage(
-			@SessionAttribute(name = "__LOGIN_DATA__", required = false) MembersVO loginMember) {
-		if(loginMember == null) {
-			return "redirect:/";
-		}
-		
+	public String viewWritePage() {
 		return "board/write";
 	}
 
@@ -67,11 +62,7 @@ public class BoardController {
 								// 반드시 @Valid 파라미터 이후에 작성!
 							    BindingResult bindingResult,
 							    Model model,
-							    @SessionAttribute(name = "__LOGIN_DATA__", required = false) MembersVO loginMember) {
-		
-		if (loginMember == null) {
-			return "redirect:/login";
-		}
+							    @SessionAttribute("__LOGIN_DATA__") MembersVO loginMember) {
 		// 사용자의 입력값을 검증 했을 때, 에러가 있다면
 		if (bindingResult.hasErrors()) {
 			// 브라우저에게 "board/write" 페이지를 보여주도록 하고
@@ -125,7 +116,7 @@ public class BoardController {
 	
 	@GetMapping("/update/{articleId}")
 	public String viewUpdatePage(@PathVariable String articleId, Model model
-							   , @SessionAttribute(name = "__LOGIN_DATA__", required = false) MembersVO loginMember)  {
+							   , @SessionAttribute("__LOGIN_DATA__") MembersVO loginMember)  {
 		BoardVO data = this.boardService.findBoardByArticleId(articleId, ReadType.UPDATE);
 		model.addAttribute("article", data);
 		
@@ -138,7 +129,7 @@ public class BoardController {
 	@PostMapping("/update/{articleId}")
 	public String doUpdateAction(@PathVariable String articleId,
 			UpdateVO updateVO,
-			@SessionAttribute(name = "__LOGIN_DATA__", required = false) MembersVO loginMember) {
+			@SessionAttribute("__LOGIN_DATA__") MembersVO loginMember) {
 		
 		updateVO.setId(articleId);
 		
