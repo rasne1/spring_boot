@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ktdsuniversity.edu.board.dao.BoardDao;
@@ -14,6 +17,7 @@ import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.SearchResultVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
+import com.ktdsuniversity.edu.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.files.dao.FilesDao;
 import com.ktdsuniversity.edu.files.helpers.MultipartFileHandler;
 import com.ktdsuniversity.edu.files.vo.request.UploadVO;
@@ -21,6 +25,7 @@ import com.ktdsuniversity.edu.files.vo.request.UploadVO;
 @Service
 public class BoardServiceImpl implements BoardService {
 
+	private static final Logger logger = LoggerFactory.getLogger(BoardServiceImpl.class);
 	/*
 	 * 빈 컨테이너에 들어있는 객체중 타입이 일치하는 객체를 할당 받는다.
 	 * 
@@ -54,8 +59,15 @@ public class BoardServiceImpl implements BoardService {
 		return result;
 	}
 	
+	@Transactional
 	@Override
 	public boolean createNewBoard(WriteVO writeVO) {
+		
+		// 첨부파일 업로드
+		List<MultipartFile> attachFiles= writeVO.getAttachFile();
+		String fileGroupId = this.multipartFileHandler.upload(attachFiles);
+		writeVO.setFileGroupId(fileGroupId);
+		
 		// dao => insert 요청
 		// mybatis 는 insert, updatem delete를 수행했을떄 
 		// 영향을 받은 row의 수를 반환시킨다.
@@ -65,14 +77,12 @@ public class BoardServiceImpl implements BoardService {
 		
 		int insertCount = this.boardDao.insertNewBoard(writeVO);
 		
-		// 첨부파일 업로드
-		List<MultipartFile> attachFiles= writeVO.getAttachFile();
-		this.multipartFileHandler.upload(attachFiles, writeVO.getId());
 		
-		System.out.println("생성된 게시글 믓개 ?"+insertCount);
+		logger.debug("생성된 게시글의 개수? {}", insertCount);
+		//System.out.println("생성된 게시글 믓개 ?"+insertCount);
 		return insertCount == 1;
 	}
-
+	@Transactional
 	@Override
 	public BoardVO findBoardByArticleId(String articleId, ReadType readType) {
 	    if (readType == ReadType.VIEW) {
@@ -80,16 +90,17 @@ public class BoardServiceImpl implements BoardService {
 	        // 1. 게시글 조회
 	        BoardVO board = this.boardDao.selectBoardById(articleId);
 	        // 2. 조회수 증가
-	        System.out.println("조회수가 증가된 게시글의 수: " + updateCount);
+	        logger.debug("조회수가 증가된 게시글의 수{}",updateCount);
+	        //System.out.println("조회수가 증가된 게시글의 수: " + updateCount);
 	        if (updateCount == 0) {
-	            return null;
+	            throw new HelloSpringException("존재하지 않는 게시글입니다.", "errors/404");
 	        }
 	        return board;
 	    }
 	    return this.boardDao.selectBoardById(articleId);
 	}
 
-
+	@Transactional
 	@Override
 	public boolean deletePosts(String id) {
 		int deletePostsById = this.boardDao.deletePostsByArticleId(id);
@@ -103,16 +114,17 @@ public class BoardServiceImpl implements BoardService {
 		}
 		// 파일 목록을 제거한 이후에 "FILES" 테이블에서 해당 파일 정보를 모두 삭제한다.
 		int deleteFileCount = this.filesDao.deleteFileByFileGroupId(id);
-		System.out.println("파일 삭제 개수?" + deleteFileCount);
+		logger.debug("파일 삭제 개수 {}", deleteFileCount);
+		//System.out.println("파일 삭제 개수?" + deleteFileCount);
 	}
 		
 		
 		return deletePostsById == 1;
 }
-
+	@Transactional
 	@Override
 	public boolean updateBoardByArticleId(UpdateVO updateVO) {
-		int updateCount = this.boardDao.updateBoardById(updateVO);
+		
 		
 		// 선택한 파일들만 삭제.
 		if(updateVO.getDeleteFileNum() !=null && updateVO.getDeleteFileNum().size()>0) {
@@ -124,13 +136,25 @@ public class BoardServiceImpl implements BoardService {
 			}
 			// 선택한 파일들을 FILES 테이블 제거.
 			int deleteCount = this.filesDao.deleteFilesByFileGroupIdAndFileNums(updateVO);
-			System.out.println(deleteCount);	
+			logger.debug("{}",deleteCount);
+			//System.out.println(deleteCount);	
 		}
 		
 		
 		
 		List<MultipartFile> attachFiles = updateVO.getAttachFile();
-		this.multipartFileHandler.upload(attachFiles, updateVO.getId());
+		
+		String fileGroupId = updateVO.getFileGroupId();
+		if(fileGroupId == null || fileGroupId.length() == 0) {
+			fileGroupId = this.multipartFileHandler.upload(attachFiles);
+			updateVO.setFileGroupId(fileGroupId);
+		}
+		else {
+			this.multipartFileHandler.upload(attachFiles,updateVO.getFileGroupId());
+		}
+		
+		int updateCount = this.boardDao.updateBoardById(updateVO);
+		
 		return updateCount == 1;
 	}
 

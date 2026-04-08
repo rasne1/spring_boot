@@ -26,4 +26,8 @@ public interface FilesDao {
 
 	List<String> selectFilePathByFileGroupId(String id);
 
+	String selectNewFileGroupId();
+
+	int insertFileGroupId(String fileGroupId);
+
 }

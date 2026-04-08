@@ -1,6 +1,6 @@
 package com.ktdsuniversity.edu.members.vo.request;
 
-public class MemberUpdateVO extends MembersVO {
+public class MemberUpdateVO extends RegistVO {
 	
 	private String name;
 	private String password;

@@ -4,15 +4,9 @@
 	pageEncoding="UTF-8"%>
 <%-- JSTL을 사용하기 위해서는 taglib directive 필요 --%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
-
-	<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>회원 목록</title>
-    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css">
-  </head>
-  <body>
+<jsp:include page="/WEB-INF/views/templates/header.jsp">
+<jsp:param value="회원 목록" name="title"/>
+</jsp:include>
     <h1>회원 목록</h1>
     <div>총 ${searchCount}회원이 검색되었습니다.</div>
 
@@ -51,5 +45,4 @@
         </tbody>
         <a href="/regist">새로운 회원 가입</a>
     </table>
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>

@@ -4,15 +4,13 @@
 	pageEncoding="UTF-8"%>
 <%-- JSTL을 사용하기 위해서는 taglib directive 필요 --%>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<!-- /template/header.jsp import -->
+<jsp:include page="/WEB-INF/views/templates/header.jsp">
+<jsp:param value="게시글 목록" name="title"/>
+</jsp:include>
 
-	<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>게시글 목록</title>
-    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css">
-  </head>
-  <body>
+
+    <div class ="grid list">
     <h1>게시글 목록</h1>
     <div>총 ${searchCount}개의 게시글이 검색되었습니다.</div>
     <!-- html주석 : 브라우저 개발자 도구에서 노출되는 주석 -->
@@ -27,7 +25,6 @@
             <tr>
             <th>번호</th>
             <th>제목</th>
-            <th>이메일</th>
             <th>조회수</th>
             <th>등록일</th>
             <th>수정일</th>
@@ -43,7 +40,7 @@
                         <td>
                             <a href="/view/${board.id}">${board.subject}</a>
                         </td>
-                        <td>${board.email}</td>
+                        <td>${board.membersVO.name}</td>
                         <td>${board.viewCnt}</td>
                         <td>${board.crtDt}</td>
                         <td>${board.mdfyDt}</td>
@@ -60,7 +57,13 @@
              <!-- searchResult가 존재하면, 반복하여 데이터를 보여주고 -->
             
         </tbody>
-        <a href="/write">새로운 게시글 작성</a>
+        <div class="btn-group">
+        <div class="right-align">
+        <c:if test="${not empty sessionScope.__LOGIN_DATA__}">
+         <a href="/write">새로운 게시글 작성</a>
+        </c:if>
+        </div>
+        </div>
+        
     </table>
-</body>
-</html>
+<jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include> 

@@ -5,23 +5,34 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ktdsuniversity.edu.board.service.BoardServiceImpl;
 import com.ktdsuniversity.edu.files.dao.FilesDao;
 import com.ktdsuniversity.edu.files.vo.request.UploadVO;
 
 @Component
 public class MultipartFileHandler {
 	
+	private static final Logger logger = LoggerFactory.getLogger(MultipartFileHandler.class);
 	@Autowired
 	private FilesDao filesDao;
 	
-	public void upload(List<MultipartFile> attachFiles,
-			String fileGroupId) {
+	public String upload(List<MultipartFile> attachFiles, String fileGroupId) {
+		
+		logger.debug("🔥 fileGroupId =  {}",fileGroupId);
+		logger.debug("🔥 length =  {}",fileGroupId.length());
+		 //System.out.println("🔥 fileGroupId = " + fileGroupId);
+		 //   System.out.println("🔥 length = " + fileGroupId.length());
+		
 		if(attachFiles != null && attachFiles.size() >0) {
+
 			for(int i =0; i<attachFiles.size(); i++) {
+				
 				
 				if(attachFiles.get(i).isEmpty()) {
 					continue;
@@ -55,10 +66,31 @@ public class MultipartFileHandler {
 					
 					this.filesDao.insertAttachFile(uploadVO);
 				} catch (IllegalStateException | IOException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
+					logger.error("파일 업로드 중 에러 발생 ! ", e);
 				}
 			}
+			return fileGroupId;
 		}
+		return null;
+	}
+
+	
+	
+	/*
+	 * 
+	 * 
+	 * */
+	public String upload(List<MultipartFile> attachFiles) {
+		if(attachFiles != null && attachFiles.size() >0) {
+			String fileGroupId = this.filesDao.selectNewFileGroupId();
+			this.filesDao.insertFileGroupId(fileGroupId);
+			
+			this.upload(attachFiles, fileGroupId);
+			
+			return fileGroupId;
+		}
+		return null;
 	}
 
 }

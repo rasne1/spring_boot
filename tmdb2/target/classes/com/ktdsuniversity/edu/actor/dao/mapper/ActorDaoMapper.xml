@@ -1,0 +1,31 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ktdsuniversity.edu.actor.dao.ActorDao">
+
+
+	<insert id="insertNewActor"
+		parameterType="com.ktdsuniversity.edu.actor.vo.request.ActorWriteVO">
+		<selectKey order="BEFORE" resultType="string"
+			keyProperty="actorId">
+			SELECT 'AC-'||TO_CHAR(SYSDATE,'YYYYMMDD-')||
+			LPAD(SEQ_ACTOR_PK.NEXTVAL,6,'0')
+			FROM DUAL
+		</selectKey>
+		INSERT INTO TMDB.ACTOR
+		(ACTOR_ID
+		, ACTOR_NAME
+		, ACTOR_PROFILE_URL)
+		VALUES
+		( #{actorId}
+		, #{actorName}
+		, #{actorProfileUrl})
+
+	</insert>
+
+
+
+
+
+</mapper>

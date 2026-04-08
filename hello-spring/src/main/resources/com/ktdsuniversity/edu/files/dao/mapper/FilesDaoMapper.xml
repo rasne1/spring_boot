@@ -45,7 +45,7 @@
     resultType="string">
     SELECT FILE_PATH
       FROM FILES
-     WHERE FILE_GROUP_ID = #{id}
+     WHERE FILE_GROUP_ID = #{fileGroupId}
        AND FILE_NUM IN 
        <foreach collection="deleteFileNum" 
                 item="fileNum" 
@@ -59,7 +59,7 @@
     parameterType="com.ktdsuniversity.edu.board.vo.request.UpdateVO">
     DELETE
       FROM FILES
-     WHERE FILE_GROUP_ID = #{id}
+     WHERE FILE_GROUP_ID = #{fileGroupId}
        AND FILE_NUM IN 
        <foreach collection="deleteFileNum" 
                 item="fileNum" 
@@ -75,7 +75,7 @@
  resultType="string">
  SELECT FILE_PATH
       FROM FILES
-     WHERE FILE_GROUP_ID = #{id}
+     WHERE FILE_GROUP_ID = #{fileGroupId}
  </select>
  
  <delete id="deleteFileByFileGroupId" parameterType="com.ktdsuniversity.edu.board.vo.request.UpdateVO">
@@ -84,4 +84,19 @@
      WHERE FILE_GROUP_ID = #{id}
 
  </delete>
+
+ <select id="selectNewFileGroupId" parameterType="com.ktdsuniversity.edu.board.vo.request.WriteVO"
+ resultType="string">
+ SELECT 'FG-' || TO_CHAR(SYSDATE, 'YYYYMMDD-')||LPAD(SEQ_FILES_GROUP_PK.NEXTVAL,6,'0')
+  FROM DUAL
+ </select>
+ 
+ <insert id="insertFileGroupId" parameterType="string">
+ INSERT INTO FILES_GROUP 
+ (FILE_GROUP_ID) 
+ VALUES
+ (#{_parameter})
+ 
+ </insert>
+ 
 </mapper>

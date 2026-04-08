@@ -1,13 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>회원가입</title>
-    <link rel="stylesheet" type="text/css" href="/css/join.css" />
-  </head>
-  <body>
+<jsp:include page="/WEB-INF/views/templates/header.jsp">
+<jsp:param value="회원 수정" name="title"/>
+</jsp:include>
     <h1>회원수정</h1>
     <form method="post" action="/members/update/${members.email}">
         <label for="name">이름</label>
@@ -34,5 +29,4 @@ pageEncoding="UTF-8"%>
         </div>
       </div>
     </form>
-  </body>
-</html>
+<jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>

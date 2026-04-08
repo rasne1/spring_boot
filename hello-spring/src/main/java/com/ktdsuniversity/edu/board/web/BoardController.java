@@ -1,8 +1,12 @@
 package com.ktdsuniversity.edu.board.web;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,14 +16,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.ktdsuniversity.edu.board.enums.ReadType;
 import com.ktdsuniversity.edu.board.service.BoardService;
+import com.ktdsuniversity.edu.board.service.BoardServiceImpl;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.SearchResultVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
+import com.ktdsuniversity.edu.exceptions.HelloSpringException;
+import com.ktdsuniversity.edu.members.vo.MembersVO;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -29,6 +39,8 @@ public class BoardController {
 	 * 
 	 */
 
+	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	
 	@Autowired
 	private BoardService boardService;
 
@@ -52,6 +64,7 @@ public class BoardController {
 
 	@GetMapping("/write")
 	public String viewWritePage() {
+
 		return "board/write";
 	}
 
@@ -59,7 +72,8 @@ public class BoardController {
 	public String doWriteAction(@Valid @ModelAttribute WriteVO writeVO,
 			//valid의 결과를 받아오는 파라미터
 			// 반드시 @Valid의 파라미터 이후에 작성
-			BindingResult bindingResult,Model model) {
+			BindingResult bindingResult,Model model
+			, @SessionAttribute("__LOGIN_DATA__") MembersVO loginMember) {
 		//사용자의 입력값을 검증 했을 때, 에러가 있다면
 		if(bindingResult.hasErrors()) {
 			//브라우저에게 "board/write" 페이지를 보여주도록 하고
@@ -68,18 +82,30 @@ public class BoardController {
 			return "board/write";
 		}
 		
-		System.out.println(writeVO.getContent());
-		System.out.println(writeVO.getEmail());
-		System.out.println(writeVO.getSubject());
+		// 로그인 데이터(__LOGIN_DATA__) 에서 로그인한 사용자의 이메일을 가져온다.
+
+		writeVO.setEmail(loginMember.getEmail());
+		
 		// create, update, delete ==> 성공/실패 여부 반환.
 		boolean createResult = this.boardService.createNewBoard(writeVO);
-
-		System.out.println("게시글 생성 어찌됬나 " + createResult);
+		logger.debug("게시글 생성 여부{}",createResult);
+		//System.out.println("게시글 생성 어찌됬나 " + createResult);
 
 		// redirect: 브라우저에게 다음 end point를 요청하도록 지시.
 		// redirect:/ ==> 브라우저에게 "/" endpoint로 이동하도록 지시.
 		return "redirect:/";
 	}
+	
+	
+	@GetMapping("/logout")
+	public String doLogoutAction(HttpSession session) {
+
+			session.invalidate();
+		return "redirect:/login";
+
+	}
+	
+	
 
 //게시글 내용 조회
 // endpoint ==> /view/게시글아이디 예> /view/BO-20260327-000001
@@ -108,20 +134,35 @@ public class BoardController {
 	}
 
 	@GetMapping("/update/{articleId}")
-	public String viewUpdatePage(@PathVariable String articleId, Model model) {
+	public String viewUpdatePage(@PathVariable String articleId, Model model, @SessionAttribute("__LOGIN_DATA__") MembersVO loginMember) {
+		
 		BoardVO data = this.boardService.findBoardByArticleId(articleId, ReadType.UPDATE);
 		model.addAttribute("article", data);
-		System.out.println(data.getId());
+		
+	
+		String logEmail =loginMember.getEmail();
+		
+		//TODO 게시글의 이메일과 세션의 이메일을 비교할 때에는
+		// 항상 ServiceImpl 에서 수행한다.
+		if(!data.getEmail().equals(logEmail)) {
+			throw new HelloSpringException("꺼져", "errors/403");
+		}
+		
+		logger.debug(data.getId());
+		//System.out.println(data.getId());
 		return "board/update";   
 	}
 
 	@PostMapping("/update/{articleId}")
-	public String doUpdateAction(@PathVariable String articleId, UpdateVO updateVO) {
+	public String doUpdateAction(@PathVariable String articleId, UpdateVO updateVO, @SessionAttribute("__LOGIN_DATA__") MembersVO loginMember) {
+		
+		updateVO.setEmail(loginMember.getEmail());
 
 		updateVO.setId(articleId);
 
 		boolean updateResult = this.boardService.updateBoardByArticleId(updateVO);
-		System.out.println("수정 성공?" + updateResult);
+		logger.debug("수정 성공? {}",updateResult);
+		//System.out.println("수정 성공?" + updateResult);
 
 		return "redirect:/view/" + articleId;
 	}

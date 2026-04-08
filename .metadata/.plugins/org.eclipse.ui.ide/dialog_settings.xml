@@ -77,14 +77,16 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Dev_programs\sts_workspace\tmdb2"/>
+			<item value="C:\Dev_programs\sts_workspace\hello-spring2"/>
 			<item value="C:\Users\User\Desktop\hello-spring2"/>
 			<item value="C:\Users\User\Desktop\tmdb"/>
 			<item value="C:\Users\User\Desktop\tmdb-web"/>
 			<item value="C:\Users\User\Desktop\새 폴더\tmdb-web2"/>
 		</list>
 		<section name="SmartImportWizard.dialogBounds">
-			<item key="DIALOG_X_ORIGIN" value="141"/>
-			<item key="DIALOG_Y_ORIGIN" value="164"/>
+			<item key="DIALOG_X_ORIGIN" value="57"/>
+			<item key="DIALOG_Y_ORIGIN" value="89"/>
 			<item key="DIALOG_WIDTH" value="888"/>
 			<item key="DIALOG_HEIGHT" value="629"/>
 			<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>

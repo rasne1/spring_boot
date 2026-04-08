@@ -4,6 +4,20 @@
  *
  */
 $().ready(function () {
+    
+    
+    //현재 Location의 pathname을 가지고 온다.
+    var pathname =location.pathname; 
+    //pathname이 "/login"이 아니라면 action을 "/login?go={pathname}"으로 수정한다.
+    if(pathname !== "/login"){
+        pathname ="?go=" + pathname;
+    }
+    else{
+        pathname="";
+    }
+    $("#loginVO").attr({action:"/login"+ pathname});
+    
+    
   // 이메일 포스커스가 해제되면, 0.15초 이후에 이메일 재검사.
   $("#email").on("blur", function () {
     setTimeout(function () {
@@ -112,7 +126,7 @@ $().ready(function () {
   // 1.폼 전송할떄 체크하는 방법
   // 2. 입력폼에 값을 입력을 할 떄 체크방법. (keyup 이벤트 활용.)
   // 폼이 전송이 될떄 이벤트를 처리.
-  $("#membersVO").on("submit", function (event) {
+  $("#registVO").on("submit", function (event) {
     //이미 브라우저에 할당된 서브밋 콜백 이벤트를 제거한다.
 
     event.preventDefault();
