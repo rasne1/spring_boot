@@ -47,6 +47,7 @@
   </div>
   <ul class="replies"></ul>
   <div class="reply-form">
+    <input type="text" class="parent-reply-id" readonly />
     <textarea class="reply-content"></textarea>
     <input type="file" class="reply-attach-file" />
     <button class="reply-save">등록</button>
