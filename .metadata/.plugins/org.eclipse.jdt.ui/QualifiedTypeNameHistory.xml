@@ -17,7 +17,6 @@
     <fullyQualifiedTypeName name="java.util.UUID"/>
     <fullyQualifiedTypeName name="jakarta.validation.constraints.Pattern"/>
     <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.ModelAttribute"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
     <fullyQualifiedTypeName name="com.ktdsuniversity.edu.members.vo.UserVO"/>
     <fullyQualifiedTypeName name="com.ktdsuniversity.edu.members.helpers.SHA256Util"/>
     <fullyQualifiedTypeName name="org.apache.ibatis.annotations.Mapper"/>
@@ -26,9 +25,18 @@
     <fullyQualifiedTypeName name="java.time.LocalDateTime"/>
     <fullyQualifiedTypeName name="java.lang.IllegalAccessError"/>
     <fullyQualifiedTypeName name="java.lang.IllegalArgumentException"/>
-    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.SessionAttribute"/>
     <fullyQualifiedTypeName name="org.springframework.web.servlet.HandlerInterceptor"/>
     <fullyQualifiedTypeName name="jakarta.servlet.http.HttpServletRequest"/>
     <fullyQualifiedTypeName name="jakarta.servlet.http.HttpSession"/>
     <fullyQualifiedTypeName name="jakarta.servlet.RequestDispatcher"/>
+    <fullyQualifiedTypeName name="ch.qos.logback.classic.Logger"/>
+    <fullyQualifiedTypeName name="org.slf4j.LoggerFactory"/>
+    <fullyQualifiedTypeName name="org.mybatis.logging.LoggerFactory"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.SessionAttribute"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="com.ktdsuniversity.edu.common.utils.ObjectUtils"/>
+    <fullyQualifiedTypeName name="com.ktdsuniversity.edu.common.utils.SessionUtils"/>
+    <fullyQualifiedTypeName name="org.springframework.web.bind.annotation.PathVariable"/>
+    <fullyQualifiedTypeName name="org.springframework.http.HttpStatus"/>
 </qualifiedTypeNameHistroy>

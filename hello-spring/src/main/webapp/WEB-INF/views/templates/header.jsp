@@ -23,9 +23,11 @@
             </c:when>
             <c:otherwise>
                 <!-- 로그인 했을 때의 링크 시작-->
+                <div class="member-info" data-email="${sessionScope.__LOGIN_DATA__.email}">
                 <div>${sessionScope.__LOGIN_DATA__.name}(${sessionScope.__LOGIN_DATA__.email})</div>
                 <a href = "/members/view/${sessionScope.__LOGIN_DATA__.email}">마이페이지</a>
                 <a href = "/logout">로그아웃</a>
+                </div>
                 <!--로그인 했을때의 링크 끝-->
             </c:otherwise>
         </c:choose>

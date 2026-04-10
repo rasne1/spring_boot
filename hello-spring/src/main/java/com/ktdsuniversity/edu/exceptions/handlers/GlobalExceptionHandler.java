@@ -1,12 +1,17 @@
 package com.ktdsuniversity.edu.exceptions.handlers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ktdsuniversity.edu.board.web.BoardController;
+import com.ktdsuniversity.edu.exceptions.HelloSpringApiException;
 import com.ktdsuniversity.edu.exceptions.HelloSpringException;
 
 /*
@@ -49,6 +54,21 @@ public class GlobalExceptionHandler {
 		}
 		
 		return errorPage;
+	}
+	@ResponseBody
+	@ExceptionHandler(HelloSpringApiException.class)
+	public Map<String, Object> returnErrorJson(HelloSpringApiException hsae){
+		logger.debug(hsae.getMessage(), hsae);
+
+		int status = hsae.getErrorStatus();
+		Object errorObject = hsae.getError();
+		
+		Map<String, Object> responseData = new HashMap<>();
+		responseData.put("status", status);
+		responseData.put("error", errorObject);
+		
+		return responseData;
+		
 	}
 	
 	@ExceptionHandler(RuntimeException.class)

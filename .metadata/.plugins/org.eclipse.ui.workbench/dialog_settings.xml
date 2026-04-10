@@ -8,12 +8,12 @@
 		<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
 	</section>
 	<section name="NewWizardAction">
-		<item key="NewWizardSelectionPage.STORE_SELECTED_ID" value="org.springsource.ide.eclipse.commons.gettingstarted.wizard.boot.NewSpringBootWizard"/>
+		<item key="NewWizardSelectionPage.STORE_SELECTED_ID" value="org.eclipse.wst.xml.ui.internal.wizards.NewXMLWizard"/>
 		<list key="NewWizardSelectionPage.STORE_EXPANDED_CATEGORIES_ID">
-			<item value="org.eclipse.jdt.ui.java"/>
-			<item value="org.eclipse.wst.jsdt.ui.java"/>
-			<item value="org.springsource.ide.eclipse.boot.wizards.category"/>
-			<item value="org.eclipse.wst.web.ui"/>
+			<item value="org.eclipse.jst.ws.ui.new"/>
+			<item value="org.eclipse.wst.XMLCategory"/>
+			<item value="org.eclipse.ui.Examples"/>
+			<item value="org.eclipse.ui.Examples/org.eclipse.wst.xml.examples"/>
 		</list>
 		<section name="NewWizard.dialogBounds">
 			<item key="DIALOG_X_ORIGIN" value="265"/>
@@ -57,5 +57,19 @@
 			<item key="DIALOG_HEIGHT" value="550"/>
 			<item key="DIALOG_FONT_NAME" value="1|맑은 고딕|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|맑은 고딕"/>
 		</section>
+	</section>
+	<section name="org.eclipse.ui.internal.QuickAccess">
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_WIDTH" value="450"/>
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_HEIGHT" value="506"/>
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_SIZE" value="true"/>
+		<item key="org.eclipse.ui.internal.quickaccess.QuickAccessDialogDIALOG_USE_PERSISTED_LOCATION" value="false"/>
+		<list key="orderedElements">
+		</list>
+		<list key="orderedProviders">
+		</list>
+		<list key="textEntries">
+		</list>
+		<list key="textArray">
+		</list>
 	</section>
 </section>
