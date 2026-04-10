@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html>
@@ -21,7 +21,10 @@
           </c:when>
           <c:otherwise>
             <%-- 로그인 했을 때의 링크 시작 --%>
-            <div>
+            <div
+              class="member-info"
+              data-email="${sessionScope.__LOGIN_DATA__.email}"
+            >
               ${sessionScope.__LOGIN_DATA__.name}
               (${sessionScope.__LOGIN_DATA__.email})
             </div>
@@ -33,3 +36,4 @@
           </c:otherwise>
         </c:choose>
       </div>
+

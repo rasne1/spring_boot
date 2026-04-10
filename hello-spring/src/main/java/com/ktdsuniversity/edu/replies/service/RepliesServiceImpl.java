@@ -12,6 +12,8 @@ import com.ktdsuniversity.edu.files.helpers.MultipartFileHandler;
 import com.ktdsuniversity.edu.replies.dao.RepliesDao;
 import com.ktdsuniversity.edu.replies.vo.RepliesVO;
 import com.ktdsuniversity.edu.replies.vo.request.CreateVO;
+import com.ktdsuniversity.edu.replies.vo.response.DeleteResultVO;
+import com.ktdsuniversity.edu.replies.vo.response.RecommendResultVO;
 import com.ktdsuniversity.edu.replies.vo.response.SearchResultVO;
 
 @Service
@@ -53,6 +55,39 @@ public class RepliesServiceImpl implements RepliesService {
 		}
 		
 		return searchResultVO;
+	}
+
+	@Override
+	public RepliesVO findReplyByReplyId(String replyId) {
+		RepliesVO reply = this.repliesDao.selectReplyByReplyId(replyId);
+		return reply;
+	}
+
+	@Transactional
+	@Override
+	public RecommendResultVO updateRecommendByReplyId(String replyId) {
+		int updateCount = this.repliesDao.updateRecommendByReplyId(replyId);
+		if (updateCount == 1) {
+			RepliesVO reply = this.repliesDao.selectReplyByReplyId(replyId);
+			
+			RecommendResultVO result = new RecommendResultVO();
+			result.setReplyId(replyId);
+			result.setRecommendCount(reply.getRecommendCnt());
+			return result;
+		}
+		return null;
+	}
+
+	@Transactional
+	@Override
+	public DeleteResultVO deleteReplyByReplyId(String replyId) {
+		int deleteCount = this.repliesDao.deleteReplyByReplyId(replyId);
+		if (deleteCount == 1) {
+			DeleteResultVO result = new DeleteResultVO();
+			result.setReplyId(replyId);
+			return result;
+		}
+		return null;
 	}
 	
 }

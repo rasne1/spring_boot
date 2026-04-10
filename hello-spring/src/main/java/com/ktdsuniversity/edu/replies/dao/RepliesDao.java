@@ -18,4 +18,8 @@ public interface RepliesDao {
 
 	List<RepliesVO> selectRepliesByArticleId(String articleId);
 
+	int updateRecommendByReplyId(String replyId);
+
+	int deleteReplyByReplyId(String replyId);
+
 }

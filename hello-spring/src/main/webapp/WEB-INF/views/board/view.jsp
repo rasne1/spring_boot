@@ -53,7 +53,7 @@
   <div class="reply-form">
     <input type="text" class="parent-reply-id" readonly />
     <textarea class="reply-content"></textarea>
-    <input type="file" class="reply-attach-file" />
+    <input type="file" class="reply-attach-file" multiple />
     <button class="reply-save" data-article-id="${article.id}">등록</button>
   </div>
 
@@ -62,12 +62,14 @@
       <div class="writer">
         <span class="writer-name">#name#</span>
         <span class="writer-email">(#email#)</span>
+        <span class="recommend-count">#recommendCount#</span> 추천
       </div>
       <div class="dates">
         <div class="create-date">#createDate# 작성</div>
         <div class="modify-date">#modifyDate# 수정</div>
       </div>
       <pre class="content">#content#</pre>
+      <div class="reply-attach-files"></div>
       <div class="links">
         <span class="links-write">답글 쓰기</span>
         <span class="links-recommend">추천하기</span>

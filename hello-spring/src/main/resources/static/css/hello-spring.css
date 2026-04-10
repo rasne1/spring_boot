@@ -304,6 +304,13 @@ div.login {
   background-color: #f3f3f3;
 }
 
+.replies > li > .reply-attach-files {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
 .replies > li > .links {
   display: flex;
   flex-direction: row;
@@ -321,6 +328,18 @@ div.login {
   color: #fff;
   background-color: #0003;
   border-radius: 0.5rem;
+}
+
+.update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.update-form > .update-button-area {
+  align-self: flex-end;
+  display: inline-flex;
+  gap: 0.625rem;
 }
 
 .reply-form {
@@ -342,4 +361,5 @@ div.login {
 .reply-form > .reply-save {
   align-self: flex-end;
 }
+
 /* 댓글 style 끝 */

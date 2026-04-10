@@ -21,6 +21,8 @@ import com.ktdsuniversity.edu.members.vo.MembersVO;
 import com.ktdsuniversity.edu.replies.service.RepliesService;
 import com.ktdsuniversity.edu.replies.vo.RepliesVO;
 import com.ktdsuniversity.edu.replies.vo.request.CreateVO;
+import com.ktdsuniversity.edu.replies.vo.response.DeleteResultVO;
+import com.ktdsuniversity.edu.replies.vo.response.RecommendResultVO;
 import com.ktdsuniversity.edu.replies.vo.response.SearchResultVO;
 
 import jakarta.validation.Valid;
@@ -90,6 +92,40 @@ public class RepliesController {
 		RepliesVO createResult = this.repliesService.createNewReply(createVO);
 		
 		return createResult;
+	}
+	
+	@ResponseBody
+	@GetMapping("/api/replies/recommend/{replyId}")
+	public RecommendResultVO doRecommendReplyByReplyId(
+			@PathVariable String replyId,
+			@SessionAttribute("__LOGIN_DATA__") MembersVO loginMember) {
+		
+		// TODO Session 비교는 Service에서.
+		RepliesVO repliesVO = this.repliesService.findReplyByReplyId(replyId);
+		if (repliesVO.getEmail().equals(loginMember.getEmail())) {
+			throw new HelloSpringApiException("권한이 부족합니다.", HttpStatus.FORBIDDEN.value(), replyId);
+		}
+		
+		RecommendResultVO recommendResult = this.repliesService.updateRecommendByReplyId(replyId);
+		
+		return recommendResult;
+	}
+	
+	@ResponseBody
+	@GetMapping("/api/replies/delete/{replyId}")
+	public DeleteResultVO doDeleteReplyByReplyId(
+			@PathVariable String replyId,
+			@SessionAttribute("__LOGIN_DATA__") MembersVO loginMember) {
+		
+		// TODO Session 비교는 Service에서.
+		RepliesVO repliesVO = this.repliesService.findReplyByReplyId(replyId);
+		if (!repliesVO.getEmail().equals(loginMember.getEmail())) {
+			throw new HelloSpringApiException("권한이 부족합니다.", HttpStatus.FORBIDDEN.value(), replyId);
+		}
+		
+		DeleteResultVO deleteResult = this.repliesService.deleteReplyByReplyId(replyId);
+		
+		return deleteResult;
 	}
 	
 }
