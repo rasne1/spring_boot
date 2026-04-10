@@ -128,4 +128,22 @@
          WHERE ID = #{_parameter} 
     </delete>
     
+    <update id="updateReplyByReplyId"
+            parameterType="com.ktdsuniversity.edu.replies.vo.request.UpdateVO">
+        UPDATE REPLIES
+           SET REPLY = #{content}
+             , FILE_GROUP_ID = #{fileGroupId}
+             , MDFY_DT = SYSDATE
+         WHERE ID = #{replyId}
+    </update>
+    
 </mapper>
+
+
+
+
+
+
+
+
+
