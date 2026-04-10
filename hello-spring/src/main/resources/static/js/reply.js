@@ -43,6 +43,9 @@ $().ready(function () {
           if (!reply.fileGroupId) {
             replyDom.find(".reply-attach-files").remove();
           } else {
+            replyDom
+              .find(".reply-attach-files")
+              .data("files", JSON.stringify(reply.files));
             // reply.files를 반복하면서 a 태그를 ".reply-attach-files" 추가.
             for (var j = 0; j < reply.files.length; j++) {
               var file = reply.files[j];
@@ -98,36 +101,46 @@ $().ready(function () {
           replyDom.find(".links-update").on("click", function () {
             $(".update-form").remove();
 
+            var replyAttachFiles = $(this)
+              .closest(".reply-item")
+              .find(".reply-attach-files")
+              .data("files");
+
+            if (replyAttachFiles) {
+              replyAttachFiles = JSON.parse(replyAttachFiles);
+            }
+
             var content = $(this)
               .closest(".reply-item")
               .find(".content")
               .text();
 
-            var newDiv = $("<div>");
-            newDiv.addClass("update-form");
+            var updateTemplate = $(".reply-item-update-template").html();
+            var updateFormDom = $(updateTemplate);
+            updateFormDom.find("textarea").val(content);
 
-            var updateTextarea = $("<textarea>");
-            updateTextarea.val(content);
-            updateTextarea.focus();
-
-            newDiv.append(updateTextarea);
-
-            var buttonArea = $("<div>");
-            buttonArea.addClass("update-button-area");
-
-            var updateButton = $("<button>");
-            updateButton.text("저장");
-            buttonArea.append(updateButton);
-
-            var cancelButton = $("<button>");
-            cancelButton.text("취소");
-            cancelButton.on("click", function () {
+            updateFormDom.find(".update-cancel").on("click", function () {
               $(".update-form").remove();
             });
-            buttonArea.append(cancelButton);
 
-            newDiv.append(buttonArea);
-            $(this).closest(".reply-item").find(".content").after(newDiv);
+            if (replyAttachFiles) {
+              var replyItemsTemplate = $(".reply-item-update-files").html();
+              for (var j = 0; j < replyAttachFiles.length; j++) {
+                var replyItemFile = replyAttachFiles[j];
+
+                var fileTemplate = replyItemsTemplate
+                  .replaceAll("#fileGroupId#", replyItemFile.fileGroupId)
+                  .replaceAll("#fileNum#", replyItemFile.fileNum)
+                  .replaceAll("#fileDisplayName#", replyItemFile.displayName);
+
+                updateFormDom.find(".update-file-list").append($(fileTemplate));
+              }
+            }
+
+            $(this)
+              .closest(".reply-item")
+              .find(".content")
+              .after(updateFormDom);
           });
 
           // 댓글 삭제

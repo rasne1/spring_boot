@@ -342,6 +342,27 @@ div.login {
   gap: 0.625rem;
 }
 
+.update-form > .update-file-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+}
+
+.update-form > .update-file-list > div > input {
+  display: none;
+}
+
+.update-form > .update-file-list > div > input + label {
+  cursor: not-allowed;
+}
+
+.update-form > .update-file-list > div > input:checked + label {
+  color: #f00;
+  text-decoration: line-through;
+  cursor: pointer;
+}
+
 .reply-form {
   display: flex;
   flex-direction: column;
