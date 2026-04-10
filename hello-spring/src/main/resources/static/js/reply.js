@@ -46,6 +46,7 @@ $().ready(function () {
             replyDom
               .find(".reply-attach-files")
               .data("files", JSON.stringify(reply.files));
+
             // reply.files를 반복하면서 a 태그를 ".reply-attach-files" 추가.
             for (var j = 0; j < reply.files.length; j++) {
               var file = reply.files[j];
@@ -121,6 +122,51 @@ $().ready(function () {
 
             updateFormDom.find(".update-cancel").on("click", function () {
               $(".update-form").remove();
+            });
+
+            updateFormDom.find(".update-save").on("click", function () {
+              console.log("저장버튼을 클릭했습니다.");
+
+              // 수정을 위해 필요한 데이터
+              // 1. 수정하려는 댓글의 아이디
+              var replyId = $(this).closest(".reply-item").data("reply-id");
+              // 2. 수정하려는 댓글의 내용.
+              var updateContent = $(this)
+                .closest(".update-form")
+                .find("textarea")
+                .val();
+              // 3. 삭제하려는 파일의 fileNum (여러 개)
+              var deleteFilesNum = $(this)
+                .closest(".update-form")
+                .find(".update-file-list")
+                .find("input[type='checkbox']:checked");
+              // 4. 추가하려는 파일 (여러 개)
+              var newAttachFiles = $(this)
+                .closest(".update-form")
+                .find(".reply-update-attach-file")[0].files;
+
+              var formData = new FormData();
+              formData.append("content", updateContent);
+              // 삭제할 파일이 있으면 formData에 추가한다.
+              deleteFilesNum.each(function () {
+                formData.append("delFileNum", $(this).val());
+              });
+              // 추가하려는 파일이 있으면 formData에 추가한다.
+              for (var j = 0; j < newAttachFiles.length; j++) {
+                formData.append("newAttachFile", newAttachFiles[j]);
+              }
+
+              fetch("/api/replies/" + replyId, {
+                method: "post",
+                body: formData,
+              })
+                .then(function (response) {
+                  return response.json();
+                })
+                .then(function (json) {
+                  $(".replies").html("");
+                  refreshReplies();
+                });
             });
 
             if (replyAttachFiles) {
