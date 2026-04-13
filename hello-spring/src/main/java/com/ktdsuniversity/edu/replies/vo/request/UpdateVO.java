@@ -11,7 +11,9 @@ public class UpdateVO {
 	@NotBlank(message="댓글 내용을 입력하세요")
 	private String content;
 	private List<Integer> delFileNum;
-	private List<MultipartFile> neAttachFile;
+	private List<MultipartFile> newAttachFile;
+	private String fileGroupId;
+	private String replyId;
 	
 	
 	public String getContent() {
@@ -26,15 +28,25 @@ public class UpdateVO {
 	public void setDelFileNum(List<Integer> delFileNum) {
 		this.delFileNum = delFileNum;
 	}
-	public List<MultipartFile> getNeAttachFile() {
-		return this.neAttachFile;
+	
+	
+	public String getFileGroupId() {
+		return fileGroupId;
 	}
-	public void setNeAttachFile(List<MultipartFile> neAttachFile) {
-		this.neAttachFile = neAttachFile;
+	public void setFileGroupId(String fileGroupId) {
+		this.fileGroupId = fileGroupId;
+	}
+	public String getReplyId() {
+		return replyId;
 	}
 	public void setReplyId(String replyId) {
-		// TODO Auto-generated method stub
-		
+		this.replyId = replyId;
+	}
+	public List<MultipartFile> getNewAttachFile() {
+		return newAttachFile;
+	}
+	public void setNewAttachFile(List<MultipartFile> newAttachFile) {
+		this.newAttachFile = newAttachFile;
 	}
 	
 	
