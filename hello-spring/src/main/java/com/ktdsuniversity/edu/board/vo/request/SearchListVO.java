@@ -42,6 +42,10 @@ public class SearchListVO {
 	// 현재 노출되고 있는 페이지 그룹의 이전 그룹 페이지 시작 번호
 	private int prevPageGroupStartPageNo;
 
+	private String searchType;
+
+	private String searchKeyword;
+
 	// listSize의 기본값 할당을 위한 생성자.
 	public SearchListVO() {
 		// 한 페이지에 10개의 게시글이 노출되도록 설정.
@@ -146,6 +150,22 @@ public class SearchListVO {
 		this.prevPageGroupStartPageNo = prevPageGroupStartPageNo;
 	}
 
+	public String getSearchType() {
+		return this.searchType;
+	}
+
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+
+	public String getSearchKeyword() {
+		return this.searchKeyword;
+	}
+
+	public void setSearchKeyword(String searchKeyword) {
+		this.searchKeyword = searchKeyword;
+	}
+
 	/**
 	 * 조회된 게시글의 개수와 listSize를 이용해 총 몇 개의 페이지가 필요한 지 계산.
 	 * 
@@ -154,46 +174,46 @@ public class SearchListVO {
 	public void computePagination(int articleCount) {
 		// 페이지의 개수 계산.
 		this.pageCount = (int) Math.ceil(articleCount / (double) this.listSize);
-		
+
 		// 페이지를 페이지네이션하기 위한 계산.
 		// 페이지 그룹의 개수 계산.
 		// (올림)(페이지 개수 / 페이지 그룹당 페이지 개수)
-		this.pageGroupCount = (int) Math.ceil( this.pageCount / (double) this.pageCountInGroup );
-		
+		this.pageGroupCount = (int) Math.ceil(this.pageCount / (double) this.pageCountInGroup);
+
 		// 현재 페이지 그룹 번호 계산.
 		// 현재 페이지 번호 / 페이지 그룹당 페이지 개수
 		this.groupNo = this.pageNo / this.pageCountInGroup;
-		
+
 		// 현재 페이지 그룹의 시작 페이지 번호 계산.
 		// 현재 페이지 그룹 번호 * 페이지 그룹당 페이지 개수
 		this.groupStartPageNo = this.groupNo * this.pageCountInGroup;
-		
+
 		// 현재 페이지 그룹의 마지막 페이지 번호 계산.
 		// (현재 페이지 그룹 번호 + 1) * 페이지 그룹당 페이지 개수 - 1
 		this.groupEndPageNo = (this.groupNo + 1) * this.pageCountInGroup - 1;
-		
+
 		// 마지막 페이지 번호 보정.
 		// 현재 페이지 그룹의 마지막 페이지 번호가 총 페이지 개수보다 클 경우 보정 필요.
 		if (this.groupEndPageNo > this.pageCount) {
 			this.groupEndPageNo = this.pageCount - 1;
 		}
-		
+
 		// 다음 그룹이 존재하는지 계산.
 		// 현재 페이지 그룹 < 총 페이지 그룹 개수 - 1
 		this.hasNextPageGroup = this.groupNo < this.pageGroupCount - 1;
-		
+
 		// 이전 그룹이 존재하는 지 계산.
 		// 현재 페이지 그룹 > 0
 		this.hasPrevPageGroup = this.groupNo > 0;
-		
+
 		// 다음 그룹의 시작 페이지 번호 계산.
 		// 현재 페이지 그룹의 마지막 페이지 번호 + 1
 		this.nextPageGroupStartPageNo = this.groupEndPageNo + 1;
-		
+
 		// 이전 그룹의 시작 페이지 번호 계산.
 		// 현재 페이지 그룹의 시작 페이지 번호 - 페이지 그룹당 페이지의 개수
 		this.prevPageGroupStartPageNo = this.groupStartPageNo - this.pageCountInGroup;
-		
+
 	}
 
 }

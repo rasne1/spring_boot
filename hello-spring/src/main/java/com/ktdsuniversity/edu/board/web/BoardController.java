@@ -38,7 +38,7 @@ public class BoardController {
 	@Autowired
 	private BoardService boardService;
 	
-	// http://192.168.211.11:8080/?pageNo=0&listSize=10
+	// http://192.168.211.11:8080/?pageNo=0&listSize=10&searchType=&searchKeyword
 	@GetMapping("/")
 	public String viewListPage(Model model, SearchListVO searchListVO) {
 		

@@ -396,6 +396,19 @@ ul.page-navigator {
   list-style-type: none;
 }
 
-ul.page-navigator > li.active {
+ul.page-navigator > li.active > a {
   color: #f00;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

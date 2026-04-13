@@ -12,7 +12,7 @@ import com.ktdsuniversity.edu.board.vo.request.WriteVO;
 @Mapper
 public interface BoardDao {
 
-	int selectBoardCount();
+	int selectBoardCount(SearchListVO searchListVO);
 
 	List<BoardVO> selectBoardList(SearchListVO searchListVO);
 

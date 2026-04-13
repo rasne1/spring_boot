@@ -44,7 +44,7 @@ public class BoardServiceImpl implements BoardService {
 		SearchResultVO result = new SearchResultVO();
 		
 		// 게시글 개수 조회. ==> 1
-		int count = this.boardDao.selectBoardCount();
+		int count = this.boardDao.selectBoardCount(searchListVO);
 		result.setCount(count);
 
 		// 몇 개의 페이지가 필요한지 계산.

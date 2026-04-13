@@ -4,11 +4,30 @@
 
 <mapper namespace="com.ktdsuniversity.edu.board.dao.BoardDao">
     <select id="selectBoardCount" 
+            parameterType="com.ktdsuniversity.edu.board.vo.request.SearchListVO"
             resultType="_int">
         SELECT COUNT(B.ID)
           FROM BOARD B
          INNER JOIN MEMBERS M
             ON B.EMAIL = M.EMAIL
+       <if test='searchKeyword != null and searchKeyword != ""'>
+         <if test='searchType == "email"'>
+         WHERE M.EMAIL LIKE '%' || #{searchKeyword}|| '%'
+         </if>
+         <if test='searchType == "name"'>
+         WHERE M.NAME LIKE '%' || #{searchKeyword}|| '%'
+         </if>
+         <if test='searchType == "subject"'>
+         WHERE B.SUBJECT LIKE '%' || #{searchKeyword}|| '%'
+         </if>
+         <if test='searchType == "content"'>
+         WHERE B.CONTENT LIKE '%' || #{searchKeyword}|| '%'
+         </if>
+         <if test='searchType == "subject content"'>
+         WHERE B.SUBJECT LIKE '%' || #{searchKeyword}|| '%'
+            OR B.CONTENT LIKE '%' || #{searchKeyword}|| '%'
+         </if>
+       </if>
     </select>
     
     <select id="selectBoardList" 
@@ -31,6 +50,24 @@
 				          FROM BOARD B
 				         INNER JOIN MEMBERS M
 				            ON B.EMAIL = M.EMAIL
+				       <if test='searchKeyword != null and searchKeyword != ""'>
+				         <if test='searchType == "email"'>
+				         WHERE M.EMAIL LIKE '%' || #{searchKeyword}|| '%'
+				         </if>
+				         <if test='searchType == "name"'>
+				         WHERE M.NAME LIKE '%' || #{searchKeyword}|| '%'
+				         </if>
+				         <if test='searchType == "subject"'>
+				         WHERE B.SUBJECT LIKE '%' || #{searchKeyword}|| '%'
+				         </if>
+				         <if test='searchType == "content"'>
+				         WHERE B.CONTENT LIKE '%' || #{searchKeyword}|| '%'
+				         </if>
+				         <if test='searchType == "subject content"'>
+				         WHERE B.SUBJECT LIKE '%' || #{searchKeyword}|| '%'
+				            OR B.CONTENT LIKE '%' || #{searchKeyword}|| '%'
+				         </if>
+				       </if>
 				         ORDER BY B.ID DESC) S
                  WHERE ROWNUM <![CDATA[ <= ]]> (#{pageNo} + 1) * #{listSize})
          WHERE RNUM >= #{pageNo} * #{listSize} + 1
