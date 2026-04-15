@@ -38,9 +38,6 @@ public class ActorController {
 			return "actor/write";
 		}
 		
-		
-		
-		
 		boolean creatResult = this.actorService.createNewActor(actorWriteVO);
 		
 		

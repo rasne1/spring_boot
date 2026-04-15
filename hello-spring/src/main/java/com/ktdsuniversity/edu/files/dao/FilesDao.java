@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
+import com.ktdsuniversity.edu.files.vo.request.SearchFileGroupVO;
 import com.ktdsuniversity.edu.files.vo.request.SearchFileVO;
 import com.ktdsuniversity.edu.files.vo.request.UploadVO;
 import com.ktdsuniversity.edu.files.vo.response.DownloadVO;
@@ -16,15 +17,13 @@ public interface FilesDao {
 
 	DownloadVO selectFilesByFileGroupIdAndFileNum(SearchFileVO searchFileVO);
 
-	Integer deleteFilesByFileGroupIdAndFileNums(UpdateVO updateVO);
+	List<String> selectFilePathByFileGroupIdAndFileNums(SearchFileGroupVO searchFileGroupVO);
 
-	List<String> selectFilePathByFileGroupIdAndFileNums(UpdateVO updateVO);
-
-	int deleteFileByFileGroupId(String id);
-
-	List<String> selectFilePathByFileGroupIdAndFileNums(String id);
+	int deleteFilesByFileGroupIdAndFileNums(SearchFileGroupVO searchFileGroupVO);
 
 	List<String> selectFilePathByFileGroupId(String id);
+
+	int deleteFileByFileGroupId(String id);
 
 	String selectNewFileGroupId();
 

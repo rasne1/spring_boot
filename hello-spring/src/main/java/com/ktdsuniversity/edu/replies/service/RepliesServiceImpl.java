@@ -1,5 +1,6 @@
 package com.ktdsuniversity.edu.replies.service;
 
+import java.io.File;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -183,4 +184,4 @@ public class RepliesServiceImpl implements RepliesService {
 	
 }
 
-}
+

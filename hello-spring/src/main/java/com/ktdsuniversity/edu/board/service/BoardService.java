@@ -3,6 +3,7 @@ package com.ktdsuniversity.edu.board.service;
 import com.ktdsuniversity.edu.board.enums.ReadType;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
 import com.ktdsuniversity.edu.board.vo.SearchResultVO;
+import com.ktdsuniversity.edu.board.vo.request.SearchListVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
 /**
@@ -17,13 +18,13 @@ import com.ktdsuniversity.edu.board.vo.request.WriteVO;
  */
 public interface BoardService {
 
-	SearchResultVO findAllBoard();
+	SearchResultVO findAllBoard(SearchListVO searchListVO);
 
 	boolean createNewBoard(WriteVO writeVO);
 
 	BoardVO findBoardByArticleId(String articleId, ReadType readType);
 
-	boolean deletePosts(String id);
+	boolean deleteBoardByArticleId(String id);
 
 	boolean updateBoardByArticleId(UpdateVO updateVO);
 

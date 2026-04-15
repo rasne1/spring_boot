@@ -2,15 +2,16 @@ package com.ktdsuniversity.edu.replies.vo.response;
 
 public class UpdateResultVO {
 	
-	private String rplyId;
+	private String replyId;
 	private boolean update;
 
-	public String getRplyId() {
-		return rplyId;
+	
+	public String getReplyId() {
+		return replyId;
 	}
 
-	public void setRplyId(String rplyId) {
-		this.rplyId = rplyId;
+	public void setReplyId(String replyId) {
+		this.replyId = replyId;
 	}
 
 	public boolean getUpdate() {
