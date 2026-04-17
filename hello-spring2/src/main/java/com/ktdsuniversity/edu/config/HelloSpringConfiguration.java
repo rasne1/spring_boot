@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -36,6 +39,8 @@ import com.ktdsuniversity.edu.security.providers.UsernameAndPasswordAuthenticati
 // Spring Security 라이브러리를 활성화 시킨다.
 // Spring Security의 필터목록을 확인하기 위해서 작성한다.
 @EnableWebSecurity(debug=false)
+//컨트롤러 혹은 서비스코드에서 권한 검사를 수행하기 위한 애노테이션 추가.
+@EnableMethodSecurity
 public class HelloSpringConfiguration implements 
 		// WebMvc 설정을 위한 Configuration
 		// @EnableWebMvc Annotation 에서 적용하는 기본 설정들을 변경하기 위함.
@@ -82,6 +87,41 @@ public class HelloSpringConfiguration implements
 	// Spring Security의 기본 로그인 절차를 수정하는 작업.
 	@Bean
 	SecurityFilterChain configureFilterChain(HttpSecurity httpSecurity) {
+		
+		// 상대방이 내서버로 접속할 수있도록 허용하기
+		// ==> 내 서버로 접속 가능한 안전한 URL 등록하기.
+		httpSecurity.cors(corsConfigurer -> {
+			
+			CorsConfigurationSource source = (httpServletRequest) -> {
+				//허용할 타 사이트의 도메인을 작성.
+				CorsConfiguration config = new CorsConfiguration();
+				
+				// 허용할 타사이트의 URL
+				// http://192.168.211.23:8080 에서 요청하는 모든 접근(api)들을 허용하겠다.
+				config.addAllowedOrigin("http://192.168.211.23:8080");
+				
+				// 허용할 타 사이트의 요청 Method
+				// http://192.168.211.23:8080에서 POST와 GET으로 요청되는 접근들만 허용하겠다.
+				config.addAllowedMethod("POST");
+				config.addAllowedMethod("GET");
+				
+				// 허용할 타 사이트의 요청 HttpHeader
+				// 모든 요청 HttpHeader를 허용하겠다.
+				// naver에서 요청 HttpHeader에 "X-Http-Request-Naver-Client-ID" 를추가할것
+				// config.addAllowedHeader
+				config.addAllowedHeader("*");
+				
+				return config;
+			};
+			
+			corsConfigurer.configurationSource(source);
+		});
+		
+		
+		
+		//CSRF 수정 , 댓글 등록 불가 (invalid CSRF token found for ....)
+		// CSRF를 체크하는 SecurityFilter ==> (CsrfFilter)를 무효화.
+		//httpSecurity.csrf(csrf-> csrf.disable());
 		
 		
 		//UsernamePasswordAuthenticationFilter

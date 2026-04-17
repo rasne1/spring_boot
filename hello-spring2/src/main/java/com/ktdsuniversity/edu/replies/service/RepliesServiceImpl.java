@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ktdsuniversity.edu.common.utils.AuthUtils;
 import com.ktdsuniversity.edu.common.utils.ObjectUtils;
 import com.ktdsuniversity.edu.exceptions.HelloSpringApiException;
 import com.ktdsuniversity.edu.files.dao.FilesDao;
@@ -86,13 +87,11 @@ public class RepliesServiceImpl implements RepliesService {
 		
 		RepliesVO reply = this.repliesDao.selectReplyByReplyId(replyId);
 		if (ObjectUtils.isNotNull(reply)) {
-			
-			// Spring Security의 SecurityContext 객체에 접근해서 authentication 객체를 가지고 온다
-			Authentication authentication =SecurityContextHolder.getContext()//SecurityContext
-								 								.getAuthentication();
-			MembersVO loginUser =(MembersVO) authentication.getPrincipal();
-			String loginEmail = loginUser.getEmail();
-			if (loginEmail.equals(reply.getEmail())) {
+				
+			String loginEmail = AuthUtils.getUsername();
+			boolean isAdminAccount = AuthUtils.hasAnyRole("RL-20260414-000001", "RL-20260414-000002");
+				
+			if (isAdminAccount || loginEmail.equals(reply.getEmail())) {
 				throw new HelloSpringApiException(
 						"권한이 부족합니다.", 
 						HttpStatus.BAD_REQUEST.value(), 
@@ -124,8 +123,10 @@ public class RepliesServiceImpl implements RepliesService {
             MembersVO loginUser =(MembersVO) authentication.getPrincipal();
             String loginEmail = loginUser.getEmail();
 			
-			
-			if (!loginEmail.equals(reply.getEmail())) {
+			// 관리자가 아니고 내가쓴것도 아니라면 댓글은 삭제 할수 없다.
+            boolean isAdminAccount = AuthUtils.hasAnyRole("RL-20260414-000001", "RL-20260414-000002");
+            
+			if (!isAdminAccount && !loginEmail.equals(reply.getEmail())) {
 				throw new HelloSpringApiException(
 						"권한이 부족합니다.", 
 						HttpStatus.BAD_REQUEST.value(), 
@@ -151,9 +152,12 @@ public class RepliesServiceImpl implements RepliesService {
 			Authentication authentication =SecurityContextHolder.getContext()//SecurityContext
 					.getAuthentication();
             MembersVO loginUser =(MembersVO) authentication.getPrincipal();
-            String loginEmail = loginUser.getEmail();
+            //String loginEmail = loginUser.getEmail();
 			
-			if (!loginEmail.equals(reply.getEmail())) {
+            String loginEmail = AuthUtils.getUsername();
+            boolean isAdminAccount = AuthUtils.hasAnyRole("RL-20260414-000001", "RL-20260414-000002");
+            
+			if (!isAdminAccount && !loginEmail.equals(reply.getEmail())) {
 				throw new HelloSpringApiException(
 						"권한이 부족합니다.", 
 						HttpStatus.BAD_REQUEST.value(), 
@@ -201,6 +205,17 @@ public class RepliesServiceImpl implements RepliesService {
 		result.setReplyId(updateVO.getReplyId());
 		result.setUpdate(updateCount == 1);
 		return result;
+	}
+	
+	@Transactional
+	@Override
+	public boolean deleteAllReply(String articleId) {
+		
+		int deleteCount = this.repliesDao.deleteAllRepliesByArticleId(articleId);
+      
+		
+		
+		return deleteCount >0;
 	}
 	
 }

@@ -1,7 +1,5 @@
 package com.ktdsuniversity.edu.members.service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +10,7 @@ import com.ktdsuniversity.edu.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.members.dao.MembersDao;
 import com.ktdsuniversity.edu.members.helpers.SHA256Util;
 import com.ktdsuniversity.edu.members.vo.MembersVO;
-import com.ktdsuniversity.edu.members.vo.request.LoginVO;
+import com.ktdsuniversity.edu.members.vo.request.MemberSearchVO;
 import com.ktdsuniversity.edu.members.vo.request.RegistVO;
 import com.ktdsuniversity.edu.members.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.members.vo.response.SearchResultVO;
@@ -70,20 +68,21 @@ public class MembersServiceImpl implements MembersService {
 	}
 
 	@Override
-	public SearchResultVO findMembersList() {
+	public SearchResultVO findMembersList(MemberSearchVO membersSearchVO) {
 		SearchResultVO result = new SearchResultVO();
-		int searchCount = this.membersDao.selectMembersCount();
+		int searchCount = this.membersDao.selectMembersCount(membersSearchVO);
 		result.setCount(searchCount);
+		
+		membersSearchVO.computePagination(searchCount);
 		
 		if (searchCount == 0) {
 			return result;
 		}
 		
-		List<MembersVO> searchResult = this.membersDao.selectMembersList();
+		List<MembersVO> searchResult = this.membersDao.selectMembersList(membersSearchVO);
 		result.setResult(searchResult);
 		
 		return result;
 	}
-
 
 }

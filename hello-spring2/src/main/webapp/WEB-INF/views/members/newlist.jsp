@@ -46,5 +46,16 @@ pageEncoding="UTF-8"%>
           <a href="/regist">새로운 회원 등록</a>
         </div>
       </div>
+      <ul class="page-navigator">
+          <c:forEach begin="0" 
+                     end="${pagination.pageCount}" 
+                     step="1"
+                     var="page">
+            <a href="/member">${page}</a>
+          </c:forEach>
+      
+      
+      
+      
     </div>
   <jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>

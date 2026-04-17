@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,10 +19,12 @@ import com.ktdsuniversity.edu.board.vo.request.SearchListVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
 import com.ktdsuniversity.edu.board.vo.response.SearchResultVO;
+import com.ktdsuniversity.edu.common.utils.AuthUtils;
 import com.ktdsuniversity.edu.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.files.dao.FilesDao;
 import com.ktdsuniversity.edu.files.helpers.MultipartFileHandler;
 import com.ktdsuniversity.edu.files.vo.request.SearchFileGroupVO;
+import com.ktdsuniversity.edu.members.vo.MembersVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -88,6 +92,9 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public BoardVO findBoardByArticleId(String articleId, ReadType readType) {
 		if (readType == ReadType.VIEW) { 
+			
+
+
 			// 1. 조회수 증가.
 			int updateCount = this.boardDao.updateViewCntIncreaseById(articleId);
 			logger.debug("조회수가 증가된 게시글의 수: {}", updateCount);
@@ -100,6 +107,15 @@ public class BoardServiceImpl implements BoardService {
 		
 		// 2. 게시글 조회.
 		BoardVO board = this.boardDao.selectBoardById(articleId);
+		if(readType == ReadType.UPDATE) {
+			
+			String loginUserEmail = AuthUtils.getUsername();
+			boolean isAdminAccount = AuthUtils.hasAnyRole("RL-20260414-000001", "RL-20260414-000002");
+
+			if (!isAdminAccount && !loginUserEmail.equals(board.getEmail())) {
+				throw new HelloSpringException("잘못된 접근입니다.", "errors/403");
+			}
+		}
 		
 		// 조회한 게시글을 반환.
 		return board;
@@ -108,6 +124,14 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	@Override
 	public boolean deleteBoardByArticleId(String id) {
+		
+		BoardVO board = this.boardDao.selectBoardById(id);
+		String loginUserEmail = AuthUtils.getUsername();
+		boolean isAdminAccount = AuthUtils.hasAnyRole("RL-20260414-000001", "RL-20260414-000002");
+		if (!isAdminAccount && !loginUserEmail.equals(board.getEmail())) {
+			throw new HelloSpringException("잘못된 접근입니다.", "errors/403");
+		}
+		
 		int deleteCount = this.boardDao.deleteBoardById(id);
 		
 		// 삭제하려는 게시글에 첨부된 파일 목록을 가져온다.
@@ -130,6 +154,19 @@ public class BoardServiceImpl implements BoardService {
 	@Transactional
 	@Override
 	public boolean updateBoardByArticleId(UpdateVO updateVO) {
+		
+		BoardVO board = this.boardDao.selectBoardById(updateVO.getId());
+		// 게시글을 불러오고
+		
+		// 권한 검사 한 이후에 경우에 따라 예외를 던져준다.
+		String loginUserEmail = AuthUtils.getUsername();
+		boolean isAdminAccount = AuthUtils.hasAnyRole("RL-20260414-000001", "RL-20260414-000002");
+		if (!isAdminAccount && !loginUserEmail.equals(board.getEmail())) {
+			throw new HelloSpringException("잘못된 접근입니다.", "errors/403");
+		}
+		
+		
+		
 		// 선택한 파일들만 삭제.
 		if ( updateVO.getDeleteFileNum() != null && 
 				updateVO.getDeleteFileNum().size() > 0) {
@@ -164,6 +201,19 @@ public class BoardServiceImpl implements BoardService {
 		int updateCount = this.boardDao.updateBoardById(updateVO);
 		
 		return updateCount == 1;
+	}
+
+	@Override
+	public boolean deleteAllBoardArticle(String id) {
+		BoardVO board = this.boardDao.selectBoardById(id);
+		
+		String loginUser =AuthUtils.getUsername();
+		boolean isAdminAccount = AuthUtils.hasAnyRole("RL-20260414-000001", "RL-20260414-000002");
+		if(!isAdminAccount) {
+			throw new HelloSpringException("잘못된 접근입니다.", "errors/403");	
+		}
+		boolean deleteResult = this.boardDao.deleteBoardAll();
+		return deleteResult;
 	}
 
 }

@@ -49,6 +49,10 @@
 
   <div class="replies-count">
     총 <span class="count">0</span>개의 댓글이 검색되었습니다.
+    <!-- 로그인 사용자가 "슈퍼관리자" 권한일떄 노출 되도록 한다. -->
+    <sec:authorize access="hasRole('RL-20260414-000001')">
+    <a href ="/reply/delete/all/${article.id}">전체 댓글 삭제</a>
+    </sec:authorize>
   </div>
   <ul class="replies"></ul>
   <div class="reply-form">
@@ -106,11 +110,16 @@
 
   <div class="btn-group">
     <div class="right-align">
+    <!-- 사용자의 권한이 (ROLE)이 슈퍼관리자 혹은 관리자 라면 내가 쓰지 않은 게시글이라도 수정 및 삭제 할 수 있다. -->
+    <sec:authorize access ="isAuthenticated()">
+    <sec:authorize access="hasAnyRole('RL-20260414-000001', 'RL-20260414-000002')" var = "isAdmin">
     <sec:authentication property="principal.email" var="loginUserEmail"/>
-      <c:if test="${loginUserEmail eq article.email}">
+      <c:if test="${ isAdmin or loginUserEmail eq article.email}">
         <a href="/update/${article.id}">수정</a>
         <a href="/delete?id=${article.id}">삭제</a>
       </c:if>
+    </sec:authorize>
+      </sec:authorize>
     </div>
   </div>
 </div>

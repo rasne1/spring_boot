@@ -9,6 +9,8 @@
 		<item key="isRegEx" value="false"/>
 		<item key="replaceBarOpen" value="false"/>
 		<list key="findhistory">
+			<item value="getresult"/>
+			<item value="board"/>
 			<item value="password"/>
 			<item value="search-button"/>
 			<item value="se"/>

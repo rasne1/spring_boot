@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -44,6 +45,7 @@ public class RepliesController {
 		return searchResult;
 	}
 	
+	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
 	@PostMapping("/api/replies-with-file")
 	public RepliesVO doCreateNewReplyWithFileAction(
@@ -72,6 +74,7 @@ public class RepliesController {
 	
 	// AJAX(API) 요청 / 반환.
 	// 요청 데이터 + 반환 데이터 ==> JSON
+	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
 	@PostMapping("/api/replies")
 	public RepliesVO doCreateNewReplyAction(
@@ -95,7 +98,7 @@ public class RepliesController {
 		
 		return createResult;
 	}
-	
+	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
 	@GetMapping("/api/replies/recommend/{replyId}")
 	public RecommendResultVO doRecommendReplyByReplyId(
@@ -105,7 +108,7 @@ public class RepliesController {
 		
 		return recommendResult;
 	}
-	
+	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
 	@GetMapping("/api/replies/delete/{replyId}")
 	public DeleteResultVO doDeleteReplyByReplyId(
@@ -115,7 +118,7 @@ public class RepliesController {
 		
 		return deleteResult;
 	}
-	
+	@PreAuthorize("isAuthenticated()")
 	@ResponseBody
 	@PostMapping("/api/replies/{replyId}")
 	public UpdateResultVO doUpdateReplyByReplyId(
@@ -135,6 +138,14 @@ public class RepliesController {
 		
 		UpdateResultVO updateResult = this.repliesService.updateReply(updateVO);
 		return updateResult;
+	}
+	@PreAuthorize("hasRole('RL-20260414-000001')")
+	@GetMapping("/reply/delete/all/{articleId}")
+	public String deleteAllReplyByArticleId(@PathVariable String articleId) {
+		
+		boolean result = this.repliesService.deleteAllReply(articleId);
+		
+		return "redirect:/view/{articleId}";
 	}
 	
 }

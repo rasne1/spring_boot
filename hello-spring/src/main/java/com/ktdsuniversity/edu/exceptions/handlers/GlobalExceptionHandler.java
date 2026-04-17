@@ -30,6 +30,19 @@ import com.ktdsuniversity.edu.exceptions.HelloSpringException;
 public class GlobalExceptionHandler {
 	
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+	
+	
+	@ExceptionHandler(AuthorizationDeniedException.class)
+	public String viewLoginPage() {
+		
+		// return redirect:/ url 변경하면서 이동
+		// return forward:/ url 변경 안하면서 이동
+		
+		return "forward:/login";
+	}
+	
+	
+	
 	/*
 	 * helloSpringException 이 던져지면,
 	 * viewErrorPage가 실행된다.

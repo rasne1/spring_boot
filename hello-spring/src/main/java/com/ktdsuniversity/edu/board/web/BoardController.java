@@ -8,6 +8,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -130,6 +131,8 @@ public class BoardController {
 		
 	}
 	
+	// 인증을 받은 사용자만 이엔드포인트를 호출 할 수 있다.
+	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/update/{articleId}")
 	public String viewUpdatePage(@PathVariable String articleId, Model model
 							   , @SessionAttribute("__LOGIN_DATA__") MembersVO loginMember)  {
