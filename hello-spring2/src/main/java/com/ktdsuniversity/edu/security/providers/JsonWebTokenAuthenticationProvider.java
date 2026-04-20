@@ -5,6 +5,7 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -17,7 +18,49 @@ import io.jsonwebtoken.security.Keys;
 
 
 public class JsonWebTokenAuthenticationProvider {
+	
+	
+	private String secretKey;
+	private String issuer;
+	
+	public JsonWebTokenAuthenticationProvider(String secretKey, String issuer) {
+		this.issuer = issuer;
+		this.secretKey = secretKey;
+		
+	}
+	
+	/**
+	 * 사용자가 요청 할때마다 Request Header[Authorization] 에 전달한
+	 * JsonWebToken을 가져와 복호화 시킨다.
+	 * 복호화 된 결과에서 사용자의 이메일(identify)을 추출하여 반환시킨다.
+	 * 
+	 * @param jsonWebToken 사용자가 전달한 토큰
+	 * @return jsonWebToken에서 추출한 사용자의 이메일
+	 */
+	
 
+	public String decryptJsonWebToken(String jsonWebToken) {
+		
+		// 암/복호화 키생성
+		// TODO appliction.yml 에서 가져오기
+		SecretKey signKey = Keys.hmacShaKeyFor(this.secretKey.getBytes());
+		
+		
+		Claims claims = Jwts.parser() // jsonWebToken을 분석하기 위한 선언.
+				 		   .verifyWith(signKey) // jsonWebToken을 복호화 하기 위한 비밀키 지정
+				 		   .requireIssuer(this.issuer) //사용자가 전달한 jsonWebToken이 hello-spring 시스템에서 만든것인지 확인한다.
+						   .build() // jsonWebToken을 복호화 시작
+						   .parseSignedClaims(jsonWebToken) //사용자가 전달한 JsonWebToken을 복호화 한다.
+						   .getPayload(); // 복호화 된 결과에서 claim들만 모아 반환시킨다. (Map의 형태)
+		
+		// 사용자가 전달한 jsonWebToken을 복호화 한뒤 identity 값을 추출한다.
+		String email = claims.get("identify", String.class);
+		
+		return email;
+	}
+	
+	
+	
 	/*
 	 * 사용자의 이메일을 이용해 인증용 JWT를 생성
 	 * 
@@ -37,13 +80,13 @@ public class JsonWebTokenAuthenticationProvider {
 		Date expirationDate = new Date( issueDate.getTime() + expiredAt.toMillis());
 		
 		// 암/복호화 키생성
-		// TODO appliction.yml 에서 가져오기
-		SecretKey signKey = Keys.hmacShaKeyFor("25xwkmldiwmxotfkehwhepVirmgldk58wEowpssxkwh".getBytes());
+		// appliction.yml 에서 가져오기
+		SecretKey signKey = Keys.hmacShaKeyFor(this.secretKey.getBytes());
 		
 		String JsonWebToken = Jwts.builder()
 								//JsonWebToken을 발생한 시스템의 이름
 								// TODO appliction.yml 에서 가져오기
-								  .issuer("hello-spring")
+								  .issuer(this.issuer)
 								//JsonWebToken의 이름
 								  .subject(email + "_token")
 								// JsonWebToken에 포함되어야 할 회원의 정보들
@@ -62,10 +105,13 @@ public class JsonWebTokenAuthenticationProvider {
 	
 	public static void main(String[] args) {
 		
-		JsonWebTokenAuthenticationProvider jwtProvider = new JsonWebTokenAuthenticationProvider();
+		JsonWebTokenAuthenticationProvider jwtProvider = new JsonWebTokenAuthenticationProvider("25xwkmldiwmxotfkehwhepVirmgldk58wEowpssxkwh","hello-spring");
 		String jwt = jwtProvider.makeJsonWebToken("test@gmail.conm", Duration.ofHours(3));
 		System.out.println(jwt);
 		
+		// 복호화 진행
+		String email = jwtProvider.decryptJsonWebToken(jwt);
+		System.out.println(email);
 		
 	}
 }

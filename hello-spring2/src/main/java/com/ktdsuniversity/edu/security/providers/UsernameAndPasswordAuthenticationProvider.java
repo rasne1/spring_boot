@@ -58,6 +58,8 @@ public class UsernameAndPasswordAuthenticationProvider implements Authentication
 		
 		//UserDetails ==> SecurityUser
 		// username ==> 아이디
+		
+		
 		UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 		if(!userDetails.isAccountNonLocked()) {
 			throw new LockedException("아이디 또는 비밀번호가 일치하지 않습니다.");

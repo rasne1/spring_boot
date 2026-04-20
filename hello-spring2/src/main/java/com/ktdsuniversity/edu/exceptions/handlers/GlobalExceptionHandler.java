@@ -27,19 +27,7 @@ public class GlobalExceptionHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-	@ExceptionHandler(AuthorizationDeniedException.class)
-	public String viewLoginPage(AuthorizationDeniedException ade, Model model) {
-		// 로그인을 했다면 ..?
-				boolean isAuthenticated = AuthUtils.isAuthenticated();
-				if (isAuthenticated) {
-					return "errors/403";
-				}
-		// return redirect:/ url 변경하면서 이동
-		// return forward:/ url 변경 안하면서 이동
-
-		return "forward:/login";
-	}
-
+	
 	/**
 	 * HelloSpringException이 던져지면, viewErrorPage가 실행된다. 실행된 결과는 ModelAndView가 된다.
 	 * 
