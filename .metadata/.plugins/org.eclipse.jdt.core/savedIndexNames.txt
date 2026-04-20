@@ -80,7 +80,6 @@ INDEX VERSION 1.134+C:\Dev_programs\sts_workspace\.metadata\.plugins\org.eclipse
 1874929222.index
 3244152045.index
 718080126.index
-4215565876.index
 1956331772.index
 2380469475.index
 119327525.index
