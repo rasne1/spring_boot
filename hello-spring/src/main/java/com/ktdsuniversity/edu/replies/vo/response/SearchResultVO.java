@@ -10,20 +10,21 @@ public class SearchResultVO {
 	private int count;
 	
 	
+	
 	public List<RepliesVO> getResult() {
-		return this.result;
+		return result;
 	}
 	public void setResult(List<RepliesVO> result) {
 		this.result = result;
 	}
 	public int getCount() {
-		return this.count;
+		return count;
 	}
 	public void setCount(int count) {
 		this.count = count;
 	}
-	
-	
-	
 
+	
+	
+	
 }

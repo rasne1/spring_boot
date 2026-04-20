@@ -1,8 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-<jsp:include page="/WEB-INF/views/templates/header.jsp">
-<jsp:param value="회원 조회" name="title"/>
-</jsp:include>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>회원 조회</title>
+    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css" />
+  </head>
+  <body>
     <h1>회원 조회</h1>
     <div class="grid view">
       <span>이름</span>
@@ -17,9 +22,9 @@ pageEncoding="UTF-8"%>
       <div class="btn-group">
         <div class="right-align">
             <a href="/members/update/${members.email}">수정</a>
-            <a href="/delete-me">회원탈퇴</a>
-            
+            <a href="/members/delete?id=${members.email}">삭제</a>
         </div>
       </div>
     </div>
-<jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>
+  </body>
+</html>

@@ -1,15 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<jsp:include page="/WEB-INF/views/templates/header.jsp">
-<jsp:param value="게시글 작성" name="title"/>
-<jsp:param value="<script type='text/javascript' src='/js/members.js'></script>" name="scripts"/>
-</jsp:include>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>로그인</title>
+    <link rel="stylesheet" type="text/css" href="/css/hello-spring.css" />
+
+    <script type="text/javascript" src="/js/jquery-4.0.0.slim.min.js"></script>
+    <script type="text/javascript" src="/js/members.js"></script>
+  </head>
+  <body>
     <h1>로그인</h1>
-    <form:form modelAttribute="loginVO" method="post" action="/login">
     <c:if test="${not empty errorMessage}">
-        <div class="validation-error"> ${errorMessage}</div>
-    </c:if>
+    <div >${errorMessage}</div>
+	</c:if>
+    <form:form modelAttribute="loginVO" method="post" action="/login-provider">
       <div class="grid login">
         <label for="login-email">이메일</label>
         <div class="input-div">
@@ -18,7 +24,7 @@
             id="login-email"
             name="email"
             placeholder="이메일을 입력하세요."
-            value="${inputData.email} ${errorData.email}"
+            value="${inputData.email}"
           />
           <form:errors path="email" cssClass="validation-error" element="div" />
         </div>
@@ -45,4 +51,5 @@
         </div>
       </div>
     </form:form>
-<jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>
+  </body>
+</html>

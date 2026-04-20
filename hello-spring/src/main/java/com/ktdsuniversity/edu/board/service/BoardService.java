@@ -2,10 +2,10 @@ package com.ktdsuniversity.edu.board.service;
 
 import com.ktdsuniversity.edu.board.enums.ReadType;
 import com.ktdsuniversity.edu.board.vo.BoardVO;
-import com.ktdsuniversity.edu.board.vo.SearchResultVO;
 import com.ktdsuniversity.edu.board.vo.request.SearchListVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
+import com.ktdsuniversity.edu.board.vo.response.SearchResultVO;
 /**
  * 상황별(회원의 등급이 다르다 => 일반사용자, 관리자, 슈퍼관리자, 운영자
  * 		/ 에플리케이션의 버전이 다르다 => 0.0.1, 1.0.2 동시에 사용하는 경우
@@ -28,5 +28,6 @@ public interface BoardService {
 
 	boolean updateBoardByArticleId(UpdateVO updateVO);
 
+	boolean deleteAllBoardArticle(String id);
 
 }

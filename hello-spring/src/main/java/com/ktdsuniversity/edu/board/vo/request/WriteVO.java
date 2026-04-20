@@ -20,57 +20,67 @@ import jakarta.validation.constraints.Size;
 
 
 public class WriteVO {
-	
+
 	private String id;
-	
-	@NotEmpty(message="제목 입력해라")
-	@Size(min = 3, message = "제목은 3글자 이상 입력.")
+
+	@NotEmpty(message = "제목은 반드시 입력해주세요.")
 	private String subject;
+
 	private String email;
+
 	private String content;
-	
+
 	private List<MultipartFile> attachFile;
-	
-	
+
 	private String fileGroupId;
-	
-	public String getFileGroupId() {
-		return this.fileGroupId;
-	}
-	public void setFileGroupId(String fileGroupId) {
-		this.fileGroupId = fileGroupId;
-	}
+
 	public String getId() {
-		return id;
+		return this.id;
 	}
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 	public String getSubject() {
 		return this.subject;
 	}
+
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
+
 	public String getEmail() {
 		return this.email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getContent() {
 		return this.content;
 	}
+
 	public void setContent(String content) {
 		this.content = content;
 	}
+
 	public List<MultipartFile> getAttachFile() {
-		return attachFile;
+		return this.attachFile;
 	}
+
 	public void setAttachFile(List<MultipartFile> attachFile) {
 		this.attachFile = attachFile;
 	}
-	
+
+	public String getFileGroupId() {
+		return this.fileGroupId;
+	}
+
+	public void setFileGroupId(String fileGroupId) {
+		this.fileGroupId = fileGroupId;
+	}
 	
 	
 }

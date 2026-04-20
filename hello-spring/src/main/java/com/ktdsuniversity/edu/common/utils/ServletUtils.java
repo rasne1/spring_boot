@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class ServletUtils {
 	
-private ServletUtils() {}
+	private ServletUtils() {}
 	
 	public static HttpServletRequest getRequest() {
 		return ServletUtils.getRequestAttributes().getRequest();

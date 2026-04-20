@@ -5,18 +5,17 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UpdateVO extends WriteVO {
-	
+
 	private List<Integer> deleteFileNum;
 
 	public List<Integer> getDeleteFileNum() {
-		return deleteFileNum;
+		return this.deleteFileNum;
 	}
 
 	public void setDeleteFileNum(List<Integer> deleteFileNum) {
 		this.deleteFileNum = deleteFileNum;
 	}
-	
-	
+
 	
 
 }

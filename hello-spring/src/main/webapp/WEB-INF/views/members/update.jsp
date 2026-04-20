@@ -1,10 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 pageEncoding="UTF-8"%>
-<jsp:include page="/WEB-INF/views/templates/header.jsp">
-<jsp:param value="회원 수정" name="title"/>
-</jsp:include>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>회원가입</title>
+    <link rel="stylesheet" type="text/css" href="/css/join.css" />
+  </head>
+  <body>
     <h1>회원수정</h1>
     <form method="post" action="/members/update/${members.email}">
+    <sec:csrfInput/>
         <label for="name">이름</label>
         <input
           type="text"
@@ -29,4 +36,5 @@ pageEncoding="UTF-8"%>
         </div>
       </div>
     </form>
-<jsp:include page="/WEB-INF/views/templates/footer.jsp"></jsp:include>
+  </body>
+</html>

@@ -16,11 +16,12 @@ public class BoardVO {
 	private String fileName;
 	private String originFileName;
 	
+	private MembersVO membersVO;
+	
 	private List<FilesVO> files;
 	
 	private String fileGroupId;
 	
-	private MembersVO membersVO;
 	
 	public List<FilesVO> getFiles() {
 		return this.files;

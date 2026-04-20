@@ -1,5 +1,7 @@
 package com.ktdsuniversity.edu.members.vo;
 
+import java.util.List;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 
@@ -23,9 +25,9 @@ public class MembersVO {
     private String latestLoginFailDate;
     private String blockYn;
     private String fileGroupId;
+    
+    private List<String> roles;
 	
-    
-    
 	public String getSalt() {
 		return salt;
 	}
@@ -103,6 +105,13 @@ public class MembersVO {
 	}
 	public void setFileGroupId(String fileGroupId) {
 		this.fileGroupId = fileGroupId;
+	}
+	
+	public List<String> getRoles() {
+		return this.roles;
+	}
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 	
 	
