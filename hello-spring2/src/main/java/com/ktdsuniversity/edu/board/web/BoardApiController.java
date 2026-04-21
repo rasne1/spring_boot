@@ -29,6 +29,7 @@ import com.ktdsuniversity.edu.board.vo.request.SearchListVO;
 import com.ktdsuniversity.edu.board.vo.request.UpdateVO;
 import com.ktdsuniversity.edu.board.vo.request.WriteVO;
 import com.ktdsuniversity.edu.board.vo.response.SearchResultVO;
+import com.ktdsuniversity.edu.common.utils.AuthUtils;
 import com.ktdsuniversity.edu.exceptions.HelloSpringApiException;
 import com.ktdsuniversity.edu.exceptions.HelloSpringException;
 import com.ktdsuniversity.edu.members.vo.MembersVO;
@@ -76,7 +77,7 @@ public class BoardApiController {
 			throw new HelloSpringApiException("글쓰기 실패", HttpStatus.BAD_REQUEST.value(), bindingResult.getFieldError());
 		}
 		
-		MembersVO loginUser = (MembersVO)authentication.getPrincipal();
+		MembersVO loginUser = AuthUtils.getPrincipal();
 		
 		// 로그인 데이터(__LOGIN_DATA__)에서 로그인 한 사용자의 이메일을 가져온다.
 		writeVO.setEmail(loginUser.getEmail());
@@ -130,7 +131,7 @@ public class BoardApiController {
 	public Map<String, Boolean> doUpdateAction(@PathVariable String articleId,
 			UpdateVO updateVO,
 			Authentication authentication) {
-		MembersVO loginUser = (MembersVO)authentication.getPrincipal();
+		MembersVO loginUser = AuthUtils.getPrincipal();
 		updateVO.setId(articleId);
 		
 		updateVO.setEmail(loginUser.getEmail());

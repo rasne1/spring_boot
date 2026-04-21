@@ -4,12 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -28,6 +33,7 @@ import com.ktdsuniversity.edu.members.dao.MembersDao;
 import com.ktdsuniversity.edu.security.authenticate.filters.JsonWebTokenAuthenticationFilter;
 import com.ktdsuniversity.edu.security.authenticate.handlers.LoginFailureHandler;
 import com.ktdsuniversity.edu.security.authenticate.handlers.LoginSuccessHandler;
+import com.ktdsuniversity.edu.security.authenticate.oauth.HelloSpringOAuthService;
 import com.ktdsuniversity.edu.security.authenticate.service.SecurityPasswordEncoder;
 import com.ktdsuniversity.edu.security.authenticate.service.SecurityUserDetailsService;
 import com.ktdsuniversity.edu.security.providers.JsonWebTokenAuthenticationProvider;
@@ -51,7 +57,8 @@ public class HelloSpringConfiguration implements
 		// WebMvc 설정을 위한 Configuration
 		// @EnableWebMvc Annotation 에서 적용하는 기본 설정들을 변경하기 위함.
 		WebMvcConfigurer {
-	@Autowired
+	@Autowired(required = false)
+	@Lazy
 	private MembersDao membersDao;
 	
 	// application.yml 에서 관련된 정보를 가져온다.
@@ -83,6 +90,18 @@ public class HelloSpringConfiguration implements
 		return new SecurityUserDetailsService(this.membersDao);
 	}
 	
+	/**
+	 * 특정 Url에 대해서 Spring Security가 개입하지 않도록 설정.
+	 * /WEB-INF/views/ 아래의 모든 Jsp 파일들은 Spring Security의 간섭을 받지 않는다.
+	 * Controller에서 해당 페이지를 노출하려 할때 "/WEB-INF/views/.../*.jsp"경로 사용시 
+	 * 인증이 된 사용자에게만 노출시키려 하는 경우가 존재 ==> Spring Security가 개입하지 않도록 설정.
+	 * @return
+	 */
+	
+	
+	
+	
+	
 	// UsernameAndPasswordAuthenticationProvider의 Bean을 생성한다.
 	@Bean
 	AuthenticationProvider createAuthenticationProvider() {
@@ -105,15 +124,30 @@ public class HelloSpringConfiguration implements
 	
 	@Bean
 	OncePerRequestFilter createJwtAuthFilter(){
-		return new JsonWebTokenAuthenticationFilter(
-				this.createJwtAuthenticationProvider(),
+		return new JsonWebTokenAuthenticationFilter(this.createJwtAuthenticationProvider(),
 				this.createUserDetailsService());
+	}
+	
+	@Bean
+	OAuth2UserService<OAuth2UserRequest, OAuth2User> createOAuth2UserService(){
+		return new HelloSpringOAuthService(this.membersDao);
+	}
+	
+	
+	@Bean
+	WebSecurityCustomizer webSecurityCustomizer() {
+		return (web) -> web.ignoring()
+				.requestMatchers("/WEB-INF/views/**");
 	}
 	
 
 	// Spring Security의 기본 로그인 절차를 수정하는 작업.
 	@Bean
 	SecurityFilterChain configureFilterChain(HttpSecurity httpSecurity) {
+		
+		httpSecurity.oauth2Login(oauth2 -> oauth2.loginPage("/login")
+				.userInfoEndpoint(endpoint -> endpoint.userService( this.createOAuth2UserService())));
+		
 		
 		// 상대방이 내서버로 접속할 수있도록 허용하기
 		// ==> 내 서버로 접속 가능한 안전한 URL 등록하기.
@@ -158,28 +192,26 @@ public class HelloSpringConfiguration implements
 		
 		//AuthorizationDeniedExceptionHandler를 추가한다.
 		//Controller 코드 이하에서 @PreAuthorized() 검증에 실패하면 아래 설정에 등록한 Handler가 동작하게 된다.
-		httpSecurity.exceptionHandling(exceptionHandling -> exceptionHandling
-				.accessDeniedHandler(new AuthorizationDeniedExceptionHandler()));
+		httpSecurity.exceptionHandling(
+				exception -> exception.accessDeniedHandler(new AuthorizationDeniedExceptionHandler()));
 		
 		
 		//UsernamePasswordAuthenticationFilter
-		httpSecurity.formLogin(formLogin -> 
-								//로그인 url을 수정.
-								formLogin.loginPage("/login")
-								//Login 인증처리 URL 지정
-								//(UsernameAndPasswordAuthenticationProvider 가 실행될 EndPoint)
-								.loginProcessingUrl("/login-provider")
-								//로그인에 필요한 아이디 파라미터 이름을 "username" 에서 "email"로 변경한다
-								.usernameParameter("email")
-								//로그인에 성공하면 뭐할까?
-								// this.membersDao.updateSuccessLogin(loginVO); 실행되어야 한다
-								.successHandler(this.createLoginSuccessHandler())
-								//로그인에 실패하면 뭐할까?
-								//this.membersDao.updateIncreaseLoginFailCount(loginVO.getEmail());
-								//this.membersDao.updateBlock(loginVO.getEmail());
-								.failureHandler(this.createLoginFailureHandler())
-								
-				);
+		httpSecurity.formLogin(formLogin ->
+		// Login URL 지정.
+		formLogin.loginPage("/login")
+				// Login 인증 처리 URL 지정
+				// (UsernameAndPasswordAuthenticationProvider가 실행될 Endpoint)
+				.loginProcessingUrl("/login-provider")
+				// 로그인에 필요한 아이디 파라미터 이름을 "username"에서 "email"로 변경한다.
+				.usernameParameter("email")
+				// 로그인에 성공하면 뭐할까?
+				// this.membersDao.updateSuccessLogin(loginVO); 실행해야 한다.
+				.successHandler(this.createLoginSuccessHandler())
+				// 로그인에 실패하면 뭐할까?
+				// this.membersDao.updateIncreaseLoginFailCount(loginVO.getEmail());
+				// this.membersDao.updateBlock(loginVO.getEmail());
+				.failureHandler(this.createLoginFailureHandler()));
 		
 		
 		return httpSecurity.build();
