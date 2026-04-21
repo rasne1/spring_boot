@@ -77,6 +77,7 @@
 		<item key="SmartImportRootWizardPage.STORE_NESTED_PROJECTS" value="true"/>
 		<item key="SmartImportRootWizardPage.STORE_CONFIGURE_NATURES" value="true"/>
 		<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+			<item value="C:\Dev_programs\sts_workspace_2\spring_boot\hello-spring2"/>
 			<item value="C:\Dev_programs\sts_workspace\kt-ds-University-27-spring-workspace\hello-spring2"/>
 			<item value="C:\Dev_programs\sts_workspace\kt-ds-University-27-spring-workspace"/>
 			<item value="C:\Dev_programs\tmdbproject\ktds-27th-tmdb"/>

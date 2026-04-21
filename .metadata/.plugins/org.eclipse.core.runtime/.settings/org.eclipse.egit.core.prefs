@@ -1,5 +1,5 @@
-GitRepositoriesView.GitDirectories=C\:\\Dev_programs\\tmdbproject\\ktds-27th-tmdb\\.git;C\:\\Dev_programs\\sts_workspace\\.git;
-GitRepositoriesView.GitDirectories.relative=C\:\\Dev_programs\\tmdbproject\\ktds-27th-tmdb\\.git;.git;
+GitRepositoriesView.GitDirectories=C\:\\Dev_programs\\sts_workspace_2\\.git;C\:\\Dev_programs\\tmdbproject\\ktds-27th-tmdb\\.git;C\:\\Dev_programs\\sts_workspace_2\\spring_boot\\.git;
+GitRepositoriesView.GitDirectories.relative=C\:\\Dev_programs\\sts_workspace_2\\.git;C\:\\Dev_programs\\tmdbproject\\ktds-27th-tmdb\\.git;.git;
 core_autoIgnoreDerivedResources=false
 core_ssh_default_agent=\\\\.\\pageant
 eclipse.preferences.version=1
