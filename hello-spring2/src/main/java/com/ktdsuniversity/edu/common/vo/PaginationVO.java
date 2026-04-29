@@ -40,8 +40,8 @@ public class PaginationVO {
 
 	
 	public PaginationVO() {
-		this.listSize = 2;
-		this.pageCountInGroup =10;
+		this.listSize = 10;
+		this.pageCountInGroup =5;
 	}
 	
 	

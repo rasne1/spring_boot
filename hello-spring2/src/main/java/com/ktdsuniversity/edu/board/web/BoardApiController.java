@@ -47,7 +47,7 @@ public class BoardApiController {
 	@Autowired
 	private BoardService boardService;
 	
-	// http://192.168.211.11:8080/?pageNo=0&listSize=10&searchType=&searchKeyword
+	// http://192.168.211.11:8080/api/articles/?pageNo=0&listSize=10&searchType=&searchKeyword
 	@ResponseBody
 	@GetMapping("/api/articles")
 	public Map<String, Object> viewListPage(SearchListVO searchListVO) {
